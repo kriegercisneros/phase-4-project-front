@@ -10,7 +10,12 @@ function App() {
       <div>
         <p>Hello!</p>
       </div>
-      <input></input><button>Search For Pets</button>
+      <div>
+          <input></input>
+          <button>username</button>
+          <input></input>
+          <button>email</button>
+        </div>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}

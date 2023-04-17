@@ -13,9 +13,23 @@ db = SQLAlchemy(metadata=metadata)
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
 
+    serialize_rules=("-saved_pets.users_backref",)
+
     id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.String, nullable = False)
     company_name = db.Column(db.String, unique = True, nullable = False)
     password = db.Column(db.String, nullable = False)
     email = db.Column(db.String, unique = True, nullable = False)
     location = db.Column(db.Integer)
+
+    saved_pets=db.relationship('SavedPets', backref='users_backref')
+
+class SavedPets(db.Model, SerializerMixin):
+    __tablename__='saved_pets'
+
+    serialize_rules=('-users_backref')
+
+    id=db.Column(db.Integer, primary_key=True)
+    dog_info=db.Column(db.String)
+    shelter_info=db.Column(db.String)
+    user_id=db.Column(db.Integer, db.ForeignKey('users.id'))

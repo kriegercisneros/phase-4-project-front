@@ -1,6 +1,8 @@
 from flask import Flask, request, make_response, jsonify, session
-#from flask_cors import CORS
+from flask_cors import CORS
 from flask_migrate import Migrate
+from flask_restful import Api, Resource
+
 import os
 from models import db, User
 
@@ -13,10 +15,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
 
-#CORS(app)
+CORS(app)
 migrate = Migrate(app, db)
 
 db.init_app(app)
+api=Api(app)
 
 #Creates a login route that checks if th user exists
 @app.route('/login', methods=['POST'])
@@ -41,6 +44,7 @@ def check_login():
             return make_response(jsonify(user.to_dict()), 200)
 
 
+
 #some boiler plate code for writing sessions
 # @app.route('/sessions/<string:key>', methods=['GET'])
 # def show_session(key):
@@ -61,3 +65,21 @@ def check_login():
 #     response.set_cookie('mouse', 'Cookie')
 
 #     return response
+
+
+class OneSavedPet():
+    def get(self,id):
+        pass
+    def delete(self,id):
+        pass
+    def patch(self,id):
+        pass
+
+class AllSavedPets():
+    def get(self):
+        pass
+    def post(self):
+        pass
+
+api.add_resource(AllSavedPets,'/saved_pets')
+api.add_resource(OneSavedPet,'/saved_pets/<int:id>')

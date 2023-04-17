@@ -1,18 +1,18 @@
 from flask import Flask, request, make_response, jsonify, session
-from flask_cors import CORS
+#from flask_cors import CORS
 from flask_migrate import Migrate
 
 from models import db
 
 app = Flask(__name__)
-app.secret_key = #generate a secret key and encrypt it
+app.secret_key = 1 #generate a secret key and encrypt it
 #python -c 'import os; print(os.urandom(16))'
 #this needs to be with postgres
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
 
-CORS(app)
+#CORS(app)
 migrate = Migrate(app, db)
 
 db.init_app(app)

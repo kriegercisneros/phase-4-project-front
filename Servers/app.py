@@ -86,12 +86,13 @@ class AllSavedPets(Resource):
     def post(self):
         pass
 
-
+client_id='QlfKcr7iICqUyDtt767UZLQQkfebpVHfuaV4zY1Yptw5uHTP57'
+client_secret='LtPgXoUz8NtAM29wFybRqVmvNTgr9Rj6ASNFgaEI'
 
 class APICall(Resource):
     def get(self):
         token=get_new_token()
-        url='https://api.petfinder.com/v2/animals?organization=co498'
+        url='https://api.petfinder.com/v2/animals?organization=co52'
         headers1={"Authorization": f'Bearer {token}'}
         res=requests.get(url, headers=headers1)
         rb=make_response(res.text)

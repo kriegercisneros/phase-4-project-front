@@ -86,6 +86,8 @@ class AllSavedPets(Resource):
     def post(self):
         pass
 
+
+
 class APICall(Resource):
     def get(self):
         token=get_new_token()
@@ -100,19 +102,18 @@ class APICall(Resource):
 
 def get_new_token():
     headers = {'Content-Type': 'application/x-www-form-urlencoded',}
-    data = 'grant_type=client_credentials&client_id=QlfKcr7iICqUyDtt767UZLQQkfebpVHfuaV4zY1Yptw5uHTP57&client_secret=LtPgXoUz8NtAM29wFybRqVmvNTgr9Rj6ASNFgaEI'
+    data = f'grant_type=client_credentials&client_id={client_id}&client_secret={client_secret}'
     res = requests.post('https://api.petfinder.com/v2/oauth2/token', headers=headers, data=data)
     rs=res.json()
     return (rs['access_token'])
     
 
 
-        
-
+    
 
 api.add_resource(AllSavedPets,'/saved_pets')
 api.add_resource(OneSavedPet,'/saved_pets/<int:id>')
-api.add_resource(APICall,'/hello')
+api.add_resource(APICall,'/petfinder_api_call')
 
 
 if __name__ == '__main__':

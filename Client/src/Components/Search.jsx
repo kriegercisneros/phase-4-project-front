@@ -7,7 +7,7 @@ function Search()
 
     useEffect(()=>
     {
-        fetch("http://127.0.0.1:5555/hello")
+        fetch("http://127.0.0.1:5555/petfinder_api_call")
         .then(res=>res.json())
         .then(data=>{
             console.log(data)

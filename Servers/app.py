@@ -1,11 +1,12 @@
 from flask import Flask, request, make_response, jsonify, session
 #from flask_cors import CORS
 from flask_migrate import Migrate
-
+import os
 from models import db, User
 
+#HOW ARE WE GOING TO GENERATE AND SAVE A SECRET KEY 
 app = Flask(__name__)
-app.secret_key = 1 #generate a secret key and encrypt it
+app.secret_key = b'\xa0H;\x03\xba9\xba,>\xbeqe\xf2\xf8\xb6\x80'
 #python -c 'import os; print(os.urandom(16))'
 #this needs to be with postgres
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
@@ -17,16 +18,28 @@ migrate = Migrate(app, db)
 
 db.init_app(app)
 
+#Creates a login route that checks if th user exists
 @app.route('/login', methods=['POST'])
-class Login():
-    jsoned_request = request.get_json()
-    user = User.query.filter(User.name == jsoned_request['name'].first())
-    if user:
-        session['user_id'] = user.id
-        res = make_response(jsonify(user.to_dict()), 200)
-        return res
-    else:
-        pass
+def login():
+    if request.method=='POST':
+        jsoned_request = request.get_json()
+        user = User.query.filter(User.email == jsoned_request['email'].first())
+        if user:
+            session['user_id'] = user.id
+            return make_response(jsonify(user.to_dict()), 200)
+        else:
+            return make_response(jsonify({"login":"Invalid User"}), 500)
+
+#save the user to a session 
+#attempts to retrieve the user's info from the db using the ID.  if the user is found, info is returned as a json obj
+@app.route('/checklogin', methods=['GET'])
+def check_login():
+    if request.method =='GET':
+        user_id = session.get('user_id')
+        if user_id:
+            user=User.query.filter(User.id ==session['user_id']).first()
+            return make_response(jsonify(user.to_dict()), 200)
+
 
 #some boiler plate code for writing sessions
 # @app.route('/sessions/<string:key>', methods=['GET'])

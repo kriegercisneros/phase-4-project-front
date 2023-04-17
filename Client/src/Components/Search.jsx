@@ -28,6 +28,7 @@ function Search()
         return (
             <div>
                 <h1>Loaded!</h1>
+                
             </div>
         )
     }

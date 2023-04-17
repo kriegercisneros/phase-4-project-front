@@ -6,7 +6,7 @@ from models import db, User
 
 #HOW ARE WE GOING TO GENERATE AND SAVE A SECRET KEY 
 app = Flask(__name__)
-app.secret_key = b'\xa0H;\x03\xba9\xba,>\xbeqe\xf2\xf8\xb6\x80'
+app.secret_key = 
 #python -c 'import os; print(os.urandom(16))'
 #this needs to be with postgres
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'

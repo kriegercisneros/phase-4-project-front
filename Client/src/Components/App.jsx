@@ -1,26 +1,17 @@
 import { useState } from 'react'
+import { Route, Routes } from "react-router-dom";
+import Login from './Login';
 
 import '../Styling/App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  //const [count, setCount] = useState(0)
 
   return (
     <div className="App">
-      <div>
-        <p>Hello!</p>
-      </div>
-      <div>
-          <input></input>
-          <button>username</button>
-          <input></input>
-          <button>email</button>
-        </div>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-      </div>
+      <Routes>
+        <Route exact path='/' element={<Login/>}/>
+      </Routes>
     </div>
   )
 }

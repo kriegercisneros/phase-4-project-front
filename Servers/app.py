@@ -1,6 +1,7 @@
 from flask import Flask, request, make_response, jsonify, session
 #from flask_cors import CORS
 from flask_migrate import Migrate
+from flask_restful import Api, Resource
 
 from models import db, User
 
@@ -16,6 +17,7 @@ app.json.compact = False
 migrate = Migrate(app, db)
 
 db.init_app(app)
+api=Api(app)
 
 @app.route('/login', methods=['POST'])
 class Login():
@@ -27,6 +29,7 @@ class Login():
         return res
     else:
         pass
+
 
 #some boiler plate code for writing sessions
 # @app.route('/sessions/<string:key>', methods=['GET'])
@@ -48,3 +51,21 @@ class Login():
 #     response.set_cookie('mouse', 'Cookie')
 
 #     return response
+
+
+class OneSavedPet():
+    def get(self,id):
+        pass
+    def delete(self,id):
+        pass
+    def patch(self,id):
+        pass
+
+class AllSavedPets():
+    def get(self):
+        pass
+    def post(self):
+        pass
+
+api.add_resource(AllSavedPets,'/saved_pets')
+api.add_resource(OneSavedPet,'/saved_pets/<int:id>')

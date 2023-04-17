@@ -29,55 +29,63 @@ migrate = Migrate(app, db)
 db.init_app(app)
 api=Api(app)
 
+@app.route('/')
+def index():
+    return make_response(
+        {"message": "Hello Jackie!"}
+    )
+
+
 @app.route('/users', methods=['GET', 'POST'])
 def users():
     if request.method=='GET':
-        users=[users.to_dict() for u in User.query.all()]
-        print(users)
-        return make_response(jsonify([users.to_dict() for u in User.query.all()]))
+        u=User.query.all()
+        user_dict_list=[users.to_dict() for users in u]
+        print(user_dict_list)
+        return make_response(jsonify(user_dict_list), 200)
 
 #Creates a login route that checks if the user exists
-@app.route('/login', methods=['POST'])
-def login():
-    if request.method=='POST':
-        jsoned_request = request.get_json()
-        user = User.query.filter(User.email == jsoned_request['email'].first())
-        if user.authenticate(jsoned_request["password"]):
-            session['user_id'] = user.id
-            return make_response(jsonify(user.to_dict()), 200)
-        else:
-            return make_response(jsonify({"login":"Invalid User"}), 500)
+# @app.route('/login', methods=['POST'])
+# def login():
+#     if request.method=='POST':
+#         jsoned_request = request.get_json()
+#         user = User.query.filter(User.email == jsoned_request['email'].first())
+#         if user.authenticate(jsoned_request["password"]):
+#             session['user_id'] = user.id
+#             return make_response(jsonify(user.to_dict()), 200)
+#         else:
+#             return make_response(jsonify({"login":"Invalid User"}), 500)
 #save the user to a session 
 #attempts to retrieve the user's info from the db using the ID.  if the user is found, info is returned as a json obj
-@app.route('/checklogin', methods=['GET'])
-def check_login():
-    if request.method =='GET':
-        user_id = session.get('user_id')
-        if user_id:
-            user=User.query.filter(User.id ==session['user_id']).first()
-            return make_response(jsonify(user.to_dict()), 200)
+# @app.route('/checklogin', methods=['GET'])
+# def check_login():
+#     if request.method =='GET':
+#         user_id = session.get('user_id')
+#         if user_id:
+#             user=User.query.filter(User.id ==session['user_id']).first()
+#             return make_response(jsonify(user.to_dict()), 200)
 
 #this is some basic code to validate or not whether or not a user is allowed to access specific resources
 #we will use this for allowing the admin to see the requests from a user
 
-@app.route('/gettype', methods=['GET'])
-def get_type():
-    if session.get("valid"):
-        user=User.query.filter(User.id == session['user_id']).first()
-        return make_response(jsonify({"user_type":user.user_type}), 200)
-    else:
-        return make_response(jsonify({"login" :"invalid user"}),400)
+# @app.route('/gettype', methods=['GET'])
+# def get_type():
+#     if session.get("valid"):
+#         user=User.query.filter(User.id == session['user_id']).first()
+#         return make_response(jsonify({"user_type":user.user_type}), 200)
+#     else:
+#         return make_response(jsonify({"login" :"invalid user"}),400)
 
-@app.before_request
-def validate():
-    if session["user_id"]:
-        user = User.query.filter(User.id == session["user_id"]).first()
-        if user.user_type == 'admin':
-            session["valid"] = True
-        else:
-            session["valid"] = False
-    else:
-        session["valid"] = False
+# @app.before_request
+# def validate():
+#     if session["user_id"]:
+#         user = User.query.filter(User.id == session["user_id"]).first()
+#         if user.user_type == 'admin':
+#             session["valid"] = True
+#         else:
+#             session["valid"] = False
+#     else:
+#         session["valid"] = False
 
 if __name__ == '__main__':
     app.run(port=5555)

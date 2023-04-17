@@ -9,8 +9,8 @@ from models import db, User, SavedPets
 
 with app.app_context():
     print("Deleting Users...")
-    # User.query.delete()
-    # SavedPets.query.delete()
+    User.query.delete()
+    SavedPets.query.delete()
     
     print("Creating users...")
     new_user_1 = User(company_name="Mountain Ski Lodge",type="user", email='hi@mail.com', password="notEncrypted", location = 80210)

@@ -1,9 +1,7 @@
 """create table birds
-
 Revision ID: 098d90e2715a
 Revises: 
 Create Date: 2023-04-17 15:15:13.387410
-
 """
 from alembic import op
 import sqlalchemy as sa

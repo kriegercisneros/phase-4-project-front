@@ -88,23 +88,23 @@ class AllSavedPets(Resource):
 
 class APICall(Resource):
     def get(self):
+        token=get_new_token()
         url='https://api.petfinder.com/v2/animals?organization=co498'
-        headers1={"Authorization": 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJRbGZLY3I3aUlDcVV5RHR0NzY3VVpMUVFrZmVicFZIZnVhVjR6WTFZcHR3NXVIVFA1NyIsImp0aSI6IjI5NGEyZTI3NDgyNGYzMWE3NDg0ZjM0YmIzY2RmYWRhNWUxMzFjMTAyMDVkNjBhMGQ2NTkzN2IyYmMzNTlkY2IyYTA0ZWEwMzRkZDVmODk4IiwiaWF0IjoxNjgxNzY0MDY1LCJuYmYiOjE2ODE3NjQwNjUsImV4cCI6MTY4MTc2NzY2NSwic3ViIjoiIiwic2NvcGVzIjpbXX0.AHD6Ngb6vPFKhfB6LV60iXbSLTC_37vkoKKEjTGbtUfc0HWCK-6-_NyRIEibAP4AvzfwkQ26JRsYA0oIG10JAbAaOOpVRYUbTjjYu1T9o_ybT_9nWAdrdCCIvXLSzLXkjvqm8Clc62wiJLYl2VVwU_Tw6yugZNjtiPB9QyC6wQ_wAeQckcK8BUKXm1xsGVzAaZeVPjtRW4ahvEwRrgOXdorvY5ykdUipHITU9lvmp36I2m48DTv8hgXscIIf-ISHK0DX_MrtRE7h1CRx1ZBLDnfbgku97nsE7qxN-cgiKMvTSCnBJeyFtIBOyEaagudRP7sfUfaEiscXUGxZbS8Tiw'}
+        headers1={"Authorization": f'Bearer {token}'}
         res=requests.get(url, headers=headers1)
-        print(type(res.text))
         rb=make_response(res.text)
         rb.status_code=200
         rb.headers={'Content-Type':"application/json"}
-        print(rb)
         return rb
     
 
 def get_new_token():
     headers = {'Content-Type': 'application/x-www-form-urlencoded',}
-    data = 'grant_type=client_credentials&client_id={CLIENT_ID}}&client_secret={CLIENT_SECRET}}'
+    data = 'grant_type=client_credentials&client_id=QlfKcr7iICqUyDtt767UZLQQkfebpVHfuaV4zY1Yptw5uHTP57&client_secret=LtPgXoUz8NtAM29wFybRqVmvNTgr9Rj6ASNFgaEI'
     res = requests.post('https://api.petfinder.com/v2/oauth2/token', headers=headers, data=data)
-    print(res.text)
-    return make_response(res.text, 200)
+    rs=res.json()
+    return (rs['access_token'])
+    
 
 
         

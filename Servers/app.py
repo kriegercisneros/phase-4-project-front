@@ -125,25 +125,31 @@ class OneSavedPet(Resource):
 
 #####################################
 ## SOMETHING IS BREAKING IN THE POST
+## NOT SURE WHAT, BUT CANT CALL
+## .TO_DICT() ON NEW_PET OBJECT 
 #####################################
 
 class AllSavedPets(Resource):
     def get(self):
-        pass
+        pets=SavedPets.query.all()
+        pets_dict=[p.to_dict() for p in pets]
+        print(pets_dict)
+        return pets_dict, 200
     def post(self):
         data=request.get_json()
-        newPet=SavedPets(
+        new_pet=SavedPets(
             name=data['name'],
             breed=data['breed'],
             gender=data['gender'],
             species=data['species'],
             photo=data['photo'],
             organization_id=data['organization_id'],
+            petfinder_id=data['petfinder_id']
             #user_id=1
         )
-        db.session.add(newPet)
+        db.session.add(new_pet)
         db.session.commit()
-        # return make_response(newPet.to_dict(),200)
+        return make_response(new_pet.to_dict(),202)
 
 class APICall(Resource):
     def get(self):
@@ -156,7 +162,6 @@ class APICall(Resource):
         rb.headers={'Content-Type':"application/json"}
         return rb
     
-
 def get_new_token():
     headers = {'Content-Type': 'application/x-www-form-urlencoded',}
     data = f'grant_type=client_credentials&client_id={client_id}&client_secret={client_secret}'

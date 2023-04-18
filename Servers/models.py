@@ -58,7 +58,7 @@ class User(db.Model, SerializerMixin):
 class SavedPets(db.Model, SerializerMixin):
     __tablename__='saved_pets'
 
-    serialize_rules=('-users_backref')
+    serialize_rules=('-users_backref',)
 
     id=db.Column(db.Integer, primary_key=True)
     name=db.Column(db.String)
@@ -67,4 +67,5 @@ class SavedPets(db.Model, SerializerMixin):
     organization_id=db.Column(db.String)
     species=db.Column(db.String)
     photo=db.Column(db.String)
+    petfinder_id=db.Column(db.Integer)
     user_id=db.Column(db.Integer, db.ForeignKey('users.id'))

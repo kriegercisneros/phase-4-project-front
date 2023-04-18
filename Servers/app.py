@@ -32,6 +32,9 @@ migrate = Migrate(app, db)
 db.init_app(app)
 api=Api(app)
 
+client_id=os.environ.get('api_key')
+client_secret=os.environ.get('secret_key')
+
 @app.route('/')
 def index():
     return make_response(

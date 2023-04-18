@@ -141,6 +141,7 @@
             ],
             "markers": "python_full_version >= '3.7.0'",
             "version": "==3.1.0"
+        },
         "bcrypt": {
             "hashes": [
                 "sha256:089098effa1bc35dc055366740a067a2fc76987e8ec75349eb9484061c54f535",
@@ -566,6 +567,7 @@
             ],
             "index": "pypi",
             "version": "==2.28.2"
+        },
         "setuptools": {
             "hashes": [
                 "sha256:257de92a9d50a60b8e22abfcbb771571fde0dbf3ec234463212027a4eeecbe9a",

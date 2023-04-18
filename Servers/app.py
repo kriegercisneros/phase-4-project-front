@@ -1,17 +1,16 @@
 from flask import Flask, request, make_response, jsonify, session
-from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
-#do i need to import Bcrypt here to because it is in the services file 
 from flask_bcrypt import Bcrypt
 from services import app,bcrypt,db
 from models import db, User
 
+from flask_cors import CORS
 import os
 from dotenv import load_dotenv
 load_dotenv()
 #use os.environ.get() to get the data from the .env file
- 
+
 #this is now in services
 # app = Flask(__name__)
 print(os.environ.get("secretkey"))
@@ -34,8 +33,7 @@ def index():
     return make_response(
         {"message": "Hello Jackie!"}
     )
-
-
+#gets all of the user info and creates a user
 @app.route('/users', methods=['GET', 'POST'])
 def users():
     if request.method=='GET':
@@ -43,20 +41,37 @@ def users():
         user_dict_list=[users.to_dict() for users in u]
         print(user_dict_list)
         return make_response(jsonify(user_dict_list), 200)
+    if request.method =='POST':
+        data=request.get_json()
+        try:
+            user = User(
+                type=data['type'],
+                company_name=data['company_name'],
+                # password=data['password'],
+                email=data['email'],
+                location=data['location']
+            )
+            user.password_hash = data['password']
+            db.session.add(user)
+            db.session.commit()
+        except Exception as e:
+            return make_response({"errors": [e.__str__()]}, 422)
+        
+        return make_response(jsonify(user.to_dict()), 201)
 
 #Creates a login route that checks if the user exists
-# @app.route('/login', methods=['POST'])
-# def login():
-#     if request.method=='POST':
-#         jsoned_request = request.get_json()
-#         user = User.query.filter(User.email == jsoned_request['email'].first())
-#         if user.authenticate(jsoned_request["password"]):
-#             session['user_id'] = user.id
-#             return make_response(jsonify(user.to_dict()), 200)
-#         else:
-#             return make_response(jsonify({"login":"Invalid User"}), 500)
-#save the user to a session 
-#attempts to retrieve the user's info from the db using the ID.  if the user is found, info is returned as a json obj
+@app.route('/login', methods=['POST'])
+def login():
+    if request.method=='POST':
+        jsoned_request = request.get_json()
+        user = User.query.filter(User.email == jsoned_request['email'].first())
+        if user.authenticate(jsoned_request["password"]):
+            session['user_id'] = user.id
+            return make_response(jsonify(user.to_dict()), 200)
+        else:
+            return make_response(jsonify({"login":"Invalid User"}), 500)
+# #save the user to a session 
+# #attempts to retrieve the user's info from the db using the ID.  if the user is found, info is returned as a json obj
 # @app.route('/checklogin', methods=['GET'])
 # def check_login():
 #     if request.method =='GET':
@@ -65,8 +80,8 @@ def users():
 #             user=User.query.filter(User.id ==session['user_id']).first()
 #             return make_response(jsonify(user.to_dict()), 200)
 
-#this is some basic code to validate or not whether or not a user is allowed to access specific resources
-#we will use this for allowing the admin to see the requests from a user
+# #this is some basic code to validate or not whether or not a user is allowed to access specific resources
+# #we will use this for allowing the admin to see the requests from a user
 
 # @app.route('/gettype', methods=['GET'])
 # def get_type():

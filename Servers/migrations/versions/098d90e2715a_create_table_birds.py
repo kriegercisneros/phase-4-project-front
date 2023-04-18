@@ -1,16 +1,14 @@
-"""Creates base saved_pets table
-
-Revision ID: 96fb3db2a8b1
+"""create table birds
+Revision ID: 098d90e2715a
 Revises: 
-Create Date: 2023-04-17 09:47:23.083061
-
+Create Date: 2023-04-17 15:15:13.387410
 """
 from alembic import op
 import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '96fb3db2a8b1'
+revision = '098d90e2715a'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -25,9 +23,9 @@ def upgrade():
     sa.Column('password', sa.String(), nullable=False),
     sa.Column('email', sa.String(), nullable=False),
     sa.Column('location', sa.Integer(), nullable=True),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('company_name'),
-    sa.UniqueConstraint('email')
+    sa.PrimaryKeyConstraint('id', name=op.f('pk_users')),
+    sa.UniqueConstraint('company_name', name=op.f('uq_users_company_name')),
+    sa.UniqueConstraint('email', name=op.f('uq_users_email'))
     )
     op.create_table('saved_pets',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -35,7 +33,7 @@ def upgrade():
     sa.Column('shelter_info', sa.String(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], name=op.f('fk_saved_pets_user_id_users')),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id', name=op.f('pk_saved_pets'))
     )
     # ### end Alembic commands ###
 

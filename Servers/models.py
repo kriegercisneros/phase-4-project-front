@@ -58,7 +58,7 @@ class User(db.Model, SerializerMixin):
 class SavedPets(db.Model, SerializerMixin):
     __tablename__='saved_pets'
 
-    serialize_rules=('-users_backref')
+    serialize_rules=('-users_backref',)
 
     id=db.Column(db.Integer, primary_key=True)
     name=db.Column(db.String)

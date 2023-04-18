@@ -22,8 +22,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
-
-.env
-
-/Users/jackiecisneros/Development/code/phase-4/phase-4-project-front/phase-4-project-front/src/assets/api_secret_key

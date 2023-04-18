@@ -132,7 +132,15 @@ class AllSavedPets(Resource):
         pass
     def post(self):
         data=request.get_json()
-        newPet=SavedPets(dog_info=data['dog_info'], shelter_info=data['shelter_info'])
+        newPet=SavedPets(
+            name=data['name'],
+            breed=data['breed'],
+            gender=data['gender'],
+            species=data['species'],
+            photo=data['photo'],
+            organization_id=data['organization_id'],
+            #user_id=1
+        )
         db.session.add(newPet)
         db.session.commit()
         # return make_response(newPet.to_dict(),200)

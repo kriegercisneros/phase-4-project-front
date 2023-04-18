@@ -30,9 +30,15 @@ function Search()
 
     function handleSavedPet(p){
 
-        let newPet={
-            dog_info:p.name, 
-            shelter_info:p.organization_id}
+        let newPet=
+        {
+            name:p.name, 
+            breed:p.breeds.primary,
+            gender:p.gender, 
+            organization_id:p.organization_id,
+            species:p.species, 
+            photo:getDogPic(p)
+        }
         console.log(newPet)
         fetch(`http://127.0.0.1:5555/saved_pets`,
         {

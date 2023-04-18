@@ -47,14 +47,17 @@ def users():
         return make_response(jsonify(user_dict_list), 200)
     if request.method =='POST':
         data=request.get_json()
+        print(data)
         try:
             user = User(
                 type=data['type'],
                 company_name=data['company_name'],
                 # password=data['password'],
                 email=data['email'],
-                location=data['location']
+                location=int(data['location']), 
+                shelter_id=data['shelter_id']
             )
+            print(user)
             user.password_hash = data['password']
             db.session.add(user)
             db.session.commit()

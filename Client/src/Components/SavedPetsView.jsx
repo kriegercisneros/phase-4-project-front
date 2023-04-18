@@ -51,7 +51,7 @@ function SavedPetsView()
                 isLoaded ? 
                 <>
                 {usersSavedPets.map(pet=>
-                    <div style={{borderColor:'black', borderStyle:'solid'}}>
+                    <div key={pet.id} style={{borderColor:'black', borderStyle:'solid'}}>
                         <h3>{pet.name}</h3>
                         <img src={pet.photo}/><br/>
                         <button onClick={e=>handleDelete(pet)}>Unfavorite</button>

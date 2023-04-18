@@ -78,13 +78,18 @@ function Search()
         }
     }
 
+    function handleLogOut(e){
+        fetch()
+    }
+
     return (
         <>
             <button onClick={e=>nav('/pets')}>View Favorited Pets</button>
+            <button onClick={e=>handleLogOut(e)}>Logout</button>
             {isLoaded?
                 <>
                     {searchedPets.animals.map(p=>
-                    <div style={{borderColor:'black', borderStyle:'solid'}}>
+                    <div key={p.id} style={{borderColor:'black', borderStyle:'solid'}}>
                         <h3>{p.name}</h3>
                         <img src={getDogPic(p)}/><br/>
                         {

@@ -95,7 +95,7 @@ def check_login():
 def get_type():
     if session.get("valid"):
         user=User.query.filter(User.id == session['user_id']).first()
-        return make_response(jsonify({"user_type":user.user_type}), 200)
+        return make_response(jsonify({"user_type":user.type}), 200)
     else:
         return make_response(jsonify({"login" :"invalid user"}),400)
 
@@ -103,7 +103,7 @@ def get_type():
 def validate():
     if 'user_id' in session:
         user = User.query.filter(User.id == session["user_id"]).first()
-        if user and user.user_type == 'user':
+        if user and user.type == 'user':
             session["valid"] = True
         else:
             session["valid"] = False
@@ -112,7 +112,6 @@ def validate():
 
 
 #     response.set_cookie('mouse', 'Cookie')
-
 #     return response
 
 
@@ -136,9 +135,7 @@ class AllSavedPets(Resource):
         newPet=SavedPets(dog_info=data['dog_info'], shelter_info=data['shelter_info'])
         db.session.add(newPet)
         db.session.commit()
-        print(newPet)
-        print(data)
-        return make_response(newPet.to_dict(),200)
+        # return make_response(newPet.to_dict(),200)
 
 class APICall(Resource):
     def get(self):

@@ -97,9 +97,6 @@ class AllSavedPets(Resource):
         print(data)
         return make_response(newPet.to_dict(),200)
 
-client_id='QlfKcr7iICqUyDtt767UZLQQkfebpVHfuaV4zY1Yptw5uHTP57'
-client_secret='LtPgXoUz8NtAM29wFybRqVmvNTgr9Rj6ASNFgaEI'
-
 class APICall(Resource):
     def get(self):
         token=get_new_token()

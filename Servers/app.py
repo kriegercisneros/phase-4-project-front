@@ -123,18 +123,16 @@ class OneSavedPet(Resource):
     def patch(self,id):
         pass
 
-#####################################
-## SOMETHING IS BREAKING IN THE POST
-## NOT SURE WHAT, BUT CANT CALL
-## .TO_DICT() ON NEW_PET OBJECT 
-#####################################
+#####################################################################
+## Need to add logic to AllSavedPets' get function
+## so that we only get the pets of the user that is logged in. 
+###################################################################
 
 class AllSavedPets(Resource):
     def get(self):
         pets=SavedPets.query.all()
         pets_dict=[p.to_dict() for p in pets]
-        print(pets_dict)
-        return pets_dict, 200
+        return make_response(pets_dict, 200)
     def post(self):
         data=request.get_json()
         new_pet=SavedPets(
@@ -146,6 +144,9 @@ class AllSavedPets(Resource):
             organization_id=data['organization_id'],
             petfinder_id=data['petfinder_id']
             #user_id=1
+            ##################################
+            ## COME BACK TO THE ABOVE
+            ##################################
         )
         db.session.add(new_pet)
         db.session.commit()

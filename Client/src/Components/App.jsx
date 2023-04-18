@@ -6,6 +6,7 @@ import Signup from './Signup';
 
 
 import '../Styling/App.css'
+import SavedPetsView from './SavedPetsView';
 
 function App() {
   //const [count, setCount] = useState(0)
@@ -16,7 +17,7 @@ function App() {
         <Route exact path='/' element={<Login/>}/>
         <Route exact path = '/signup' element ={<Signup/>}/>
         <Route exact path='/search' element={<Search/>}/>
-
+        <Route exact path='/pets' element={<SavedPetsView/>}/>
       </Routes>
     </div>
   )

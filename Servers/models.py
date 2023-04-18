@@ -30,6 +30,8 @@ class User(db.Model, SerializerMixin):
     _password_hash = db.Column(db.String)
     email = db.Column(db.String, unique = True, nullable = False)
     location = db.Column(db.Integer)
+    #need to be connected
+    shelter_id=db.Column(db.String)
 
     saved_pets=db.relationship('SavedPets', backref='users_backref')
 
@@ -59,6 +61,10 @@ class SavedPets(db.Model, SerializerMixin):
     serialize_rules=('-users_backref')
 
     id=db.Column(db.Integer, primary_key=True)
-    dog_info=db.Column(db.String)
-    shelter_info=db.Column(db.String)
+    name=db.Column(db.String)
+    breed=db.Column(db.String)
+    gender=db.Column(db.String)
+    organization_id=db.Column(db.String)
+    species=db.Column(db.String)
+    photo=db.Column(db.String)
     user_id=db.Column(db.Integer, db.ForeignKey('users.id'))

@@ -32,6 +32,9 @@ migrate = Migrate(app, db)
 db.init_app(app)
 api=Api(app)
 
+client_id=os.environ.get('api_key')
+client_secret=os.environ.get('secret_key')
+
 @app.route('/')
 def index():
     return make_response(
@@ -119,7 +122,6 @@ def validate():
 
 
 #     response.set_cookie('mouse', 'Cookie')
-
 #     return response
 
 
@@ -143,9 +145,7 @@ class AllSavedPets(Resource):
         newPet=SavedPets(dog_info=data['dog_info'], shelter_info=data['shelter_info'])
         db.session.add(newPet)
         db.session.commit()
-        print(newPet)
-        print(data)
-        return make_response(newPet.to_dict(),200)
+        # return make_response(newPet.to_dict(),200)
 
 class APICall(Resource):
     def get(self):

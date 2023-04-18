@@ -3,6 +3,7 @@ from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
 import requests
+from models import SavedPets, User
 
 import os
 from models import db, User
@@ -80,13 +81,24 @@ class OneSavedPet(Resource):
     def patch(self,id):
         pass
 
+#####################################
+## SOMETHING IS BREAKING IN THE POST
+#####################################
+
 class AllSavedPets(Resource):
     def get(self):
         pass
     def post(self):
-        pass
+        data=request.get_json()
+        newPet=SavedPets(dog_info=data['dog_info'], shelter_info=data['shelter_info'])
+        db.session.add(newPet)
+        db.session.commit()
+        print(newPet)
+        print(data)
+        return make_response(newPet.to_dict(),200)
 
-
+client_id='QlfKcr7iICqUyDtt767UZLQQkfebpVHfuaV4zY1Yptw5uHTP57'
+client_secret='LtPgXoUz8NtAM29wFybRqVmvNTgr9Rj6ASNFgaEI'
 
 class APICall(Resource):
     def get(self):

@@ -1,20 +1,24 @@
 from flask import Flask, request, make_response, jsonify, session
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
+import requests
+from models import db, SavedPets, User
 from flask_bcrypt import Bcrypt
 from services import app,bcrypt,db
-from models import db, User
-
-from flask_cors import CORS
 import os
+from flask_cors import CORS
 from dotenv import load_dotenv
+
+app = Flask(__name__)
+
+
 load_dotenv()
 #use os.environ.get() to get the data from the .env file
 
 #this is now in services
-# app = Flask(__name__)
-print(os.environ.get("secretkey"))
+
 app.secret_key = os.environ.get("secretkey")
+
 #python -c 'import os; print(os.urandom(16))'
 #this needs to be with postgres
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI')
@@ -70,6 +74,7 @@ def login():
             return make_response(jsonify(user.to_dict()), 200)
         else:
             return make_response(jsonify({"login":"Invalid User"}), 500)
+        
 # #save the user to a session 
 # #attempts to retrieve the user's info from the db using the ID.  if the user is found, info is returned as a json obj
 # @app.route('/checklogin', methods=['GET'])
@@ -91,6 +96,10 @@ def login():
 #     else:
 #         return make_response(jsonify({"login" :"invalid user"}),400)
 
+@app.route('/test', methods=['GET'])
+def test():
+    if request.method =='GET':
+        return make_response({}, 200)
 # @app.before_request
 # def validate():
 #     if session["user_id"]:
@@ -102,22 +111,61 @@ def login():
 #     else:
 #         session["valid"] = False
 
+
+#     response.set_cookie('mouse', 'Cookie')
+
+#     return response
+
+
+class OneSavedPet(Resource):
+    def get(self,id):
+        pass
+    def delete(self,id):
+        pass
+    def patch(self,id):
+        pass
+
+#####################################
+## SOMETHING IS BREAKING IN THE POST
+#####################################
+
+class AllSavedPets(Resource):
+    def get(self):
+        pass
+    def post(self):
+        data=request.get_json()
+        newPet=SavedPets(dog_info=data['dog_info'], shelter_info=data['shelter_info'])
+        db.session.add(newPet)
+        db.session.commit()
+        print(newPet)
+        print(data)
+        return make_response(newPet.to_dict(),200)
+
+class APICall(Resource):
+    def get(self):
+        token=get_new_token()
+        url='https://api.petfinder.com/v2/animals?organization=co52'
+        headers1={"Authorization": f'Bearer {token}'}
+        res=requests.get(url, headers=headers1)
+        rb=make_response(res.text)
+        rb.status_code=200
+        rb.headers={'Content-Type':"application/json"}
+        return rb
+    
+
+def get_new_token():
+    headers = {'Content-Type': 'application/x-www-form-urlencoded',}
+    data = f'grant_type=client_credentials&client_id={client_id}&client_secret={client_secret}'
+    res = requests.post('https://api.petfinder.com/v2/oauth2/token', headers=headers, data=data)
+    rs=res.json()
+    return (rs['access_token'])
+    
+    
+api.add_resource(AllSavedPets,'/saved_pets')
+api.add_resource(OneSavedPet,'/saved_pets/<int:id>')
+api.add_resource(APICall,'/petfinder_api_call')
+
+
 if __name__ == '__main__':
-    app.run(port=5555)
+    app.run( port = 5555, debug = True )
 
-# class OneSavedPet():
-#     def get(self,id):
-#         pass
-#     def delete(self,id):
-#         pass
-#     def patch(self,id):
-#         pass
-
-# class AllSavedPets():
-#     def get(self):
-#         pass
-#     def post(self):
-#         pass
-
-# api.add_resource(AllSavedPets,'/saved_pets')
-# api.add_resource(OneSavedPet,'/saved_pets/<int:id>')

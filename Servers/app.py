@@ -129,23 +129,42 @@ class OneSavedPet(Resource):
     def get(self,id):
         pass
     def delete(self,id):
-        pass
+        pet=SavedPets.query.filter(SavedPets.id==id).first()
+        print(pet)
+        db.session.delete(pet)
+        db.session.commit()
+        return make_response({"message":"Pet deleted from database"},200)
     def patch(self,id):
         pass
 
-#####################################
-## SOMETHING IS BREAKING IN THE POST
-#####################################
+#####################################################################
+## Need to add logic to AllSavedPets' get function
+## so that we only get the pets of the user that is logged in. 
+###################################################################
 
 class AllSavedPets(Resource):
     def get(self):
-        pass
+        pets=SavedPets.query.all()
+        pets_dict=[p.to_dict() for p in pets]
+        return make_response(pets_dict, 200)
     def post(self):
         data=request.get_json()
-        newPet=SavedPets(dog_info=data['dog_info'], shelter_info=data['shelter_info'])
-        db.session.add(newPet)
+        new_pet=SavedPets(
+            name=data['name'],
+            breed=data['breed'],
+            gender=data['gender'],
+            species=data['species'],
+            photo=data['photo'],
+            organization_id=data['organization_id'],
+            petfinder_id=data['petfinder_id'],
+            user_id=26
+            ##################################
+            ## COME BACK TO THE ABOVE
+            ##################################
+        )
+        db.session.add(new_pet)
         db.session.commit()
-        # return make_response(newPet.to_dict(),200)
+        return make_response(new_pet.to_dict(),202)
 
 class APICall(Resource):
     def get(self):
@@ -158,7 +177,6 @@ class APICall(Resource):
         rb.headers={'Content-Type':"application/json"}
         return rb
     
-
 def get_new_token():
     headers = {'Content-Type': 'application/x-www-form-urlencoded',}
     data = f'grant_type=client_credentials&client_id={client_id}&client_secret={client_secret}'

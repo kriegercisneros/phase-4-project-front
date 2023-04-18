@@ -67,4 +67,5 @@ class SavedPets(db.Model, SerializerMixin):
     organization_id=db.Column(db.String)
     species=db.Column(db.String)
     photo=db.Column(db.String)
+    petfinder_id=db.Column(db.Integer)
     user_id=db.Column(db.Integer, db.ForeignKey('users.id'))

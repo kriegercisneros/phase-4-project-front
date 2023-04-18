@@ -30,7 +30,7 @@ class User(db.Model, SerializerMixin):
     _password_hash = db.Column(db.String)
     email = db.Column(db.String, unique = True, nullable = False)
     location = db.Column(db.Integer)
-    #need to be connected
+    #need to be connected?
     shelter_id=db.Column(db.String)
 
     saved_pets=db.relationship('SavedPets', backref='users_backref')

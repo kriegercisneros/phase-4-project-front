@@ -50,14 +50,17 @@ def users():
         return make_response(jsonify(user_dict_list), 200)
     if request.method =='POST':
         data=request.get_json()
+        print(data)
         try:
             user = User(
                 type=data['type'],
                 company_name=data['company_name'],
                 # password=data['password'],
                 email=data['email'],
-                location=data['location']
+                location=int(data['location']), 
+                shelter_id=data['shelter_id']
             )
+            print(user)
             user.password_hash = data['password']
             db.session.add(user)
             db.session.commit()
@@ -87,9 +90,15 @@ def check_login():
         if user_id:
             user=User.query.filter(User.id ==session['user_id']).first()
             return make_response(jsonify(user.to_dict()), 200)
+    return make_response({"message":"login checked"})
 
 # #this is some basic code to validate or not whether or not a user is allowed to access specific resources
 # #we will use this for allowing the admin to see the requests from a user
+
+@app.route('/logout', methods=['DELETE'])
+def logout():
+    session['user_id']=None
+    return make_response(jsonify({"login":"loggedout"}),200)
 
 @app.route('/gettype', methods=['GET'])
 def get_type():
@@ -98,6 +107,7 @@ def get_type():
         return make_response(jsonify({"user_type":user.type}), 200)
     else:
         return make_response(jsonify({"login" :"invalid user"}),400)
+    
 
 @app.before_request
 def validate():

@@ -5,6 +5,7 @@ import Search from './Search';
 import Signup from './Signup';
 
 
+
 import '../Styling/App.css'
 
 function App() {
@@ -16,7 +17,6 @@ function App() {
         <Route exact path='/' element={<Login/>}/>
         <Route exact path = '/signup' element ={<Signup/>}/>
         <Route exact path='/search' element={<Search/>}/>
-
       </Routes>
     </div>
   )

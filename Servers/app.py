@@ -75,7 +75,7 @@ def login():
     if request.method=='POST':
         jsoned_request = request.get_json()
         user = User.query.filter(User.email == jsoned_request['email']).first()
-        if user.authenticate(jsoned_request["password"]):
+        if user and user.authenticate(jsoned_request["password"]):
             session["user_id"] = user.id
             return make_response(jsonify(user.to_dict()), 200)
         else:
@@ -92,12 +92,22 @@ def check_login():
             return make_response(jsonify(user.to_dict()), 200)
     return make_response({"message":"login checked"})
 
+#funcitonality here to check to see if we are loggedin
+# class check_logged_in(Resource):
+#     def get(self):
+#         user_id = session.get('user_id')
+#         if user_id:
+#             return make_response({"loggedin":"True"}, 200)
+#         return make_response({"loggedin":"False"}, 200)
+# api.add_resource(check_logged_in)
+
 # #this is some basic code to validate or not whether or not a user is allowed to access specific resources
 # #we will use this for allowing the admin to see the requests from a user
 
 @app.route('/logout', methods=['DELETE'])
 def logout():
     session['user_id']=None
+    print(session['user_id'])
     return make_response(jsonify({"login":"loggedout"}),200)
 
 @app.route('/gettype', methods=['GET'])

@@ -119,7 +119,11 @@ class OneSavedPet(Resource):
     def get(self,id):
         pass
     def delete(self,id):
-        pass
+        pet=SavedPets.query.filter(SavedPets.id==id).first()
+        print(pet)
+        db.session.delete(pet)
+        db.session.commit()
+        return make_response({"message":"Pet deleted from database"},200)
     def patch(self,id):
         pass
 
@@ -142,8 +146,8 @@ class AllSavedPets(Resource):
             species=data['species'],
             photo=data['photo'],
             organization_id=data['organization_id'],
-            petfinder_id=data['petfinder_id']
-            #user_id=1
+            petfinder_id=data['petfinder_id'],
+            user_id=26
             ##################################
             ## COME BACK TO THE ABOVE
             ##################################

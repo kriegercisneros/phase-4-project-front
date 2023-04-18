@@ -27,7 +27,21 @@ function SavedPetsView()
 
     function handleDelete(p)
     {
-        console.log(p)
+        fetch(`http://127.0.0.1:5555/saved_pets/${p.id}`,
+        {
+            method: 'DELETE',
+            headers: 
+            {
+                'Content-Type':'application/json',
+                'Accepts':'application/json'
+            }
+        })
+        .then(res=>res.json())
+        .then(data=>
+        {
+            setUsersSavedPets(usersSavedPets.filter(pet=>pet.id!==p.id))
+            alert(data['message'])
+        })
     }
 
     return (

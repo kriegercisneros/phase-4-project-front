@@ -74,8 +74,10 @@ def users():
 def login():
     if request.method=='POST':
         jsoned_request = request.get_json()
+        print(jsoned_request)
         user = User.query.filter(User.email == jsoned_request['email']).first()
-        if user.authenticate(jsoned_request["password"]):
+       # print(user)
+        if user and user.authenticate(jsoned_request["password"]):
             session["user_id"] = user.id
             return make_response(jsonify(user.to_dict()), 200)
         else:
@@ -159,7 +161,7 @@ class AllSavedPets(Resource):
             petfinder_id=data['petfinder_id'],
             user_id=26
             ##################################
-            ## COME BACK TO THE ABOVE
+            ## COME BACK TO USER_ID
             ##################################
         )
         db.session.add(new_pet)

@@ -16,7 +16,7 @@ function SavedPetsView()
 
     useEffect(()=>
     {
-        fetch("http://127.0.0.1:5555/saved_pets")
+        fetch("http://127.0.0.1:8000/saved_pets")
         .then(res=>res.json())
         .then(data=>
         {
@@ -27,7 +27,7 @@ function SavedPetsView()
 
     function handleDelete(p)
     {
-        fetch(`http://127.0.0.1:5555/saved_pets/${p.id}`,
+        fetch(`http://127.0.0.1:8000/saved_pets/${p.id}`,
         {
             method: 'DELETE',
             headers: 

@@ -36,7 +36,8 @@ function Basic(){
                   body: JSON.stringify(values)
               })
                   .then((r)=>r.json())
-                  .then(()=>nav('/search'))
+                  .then(data=>console.log(data))
+                  //.then(()=>nav('/search'))
               // console.log(JSON.stringify(values, null, 2));
                   .then(setSubmitting(false))
             }}

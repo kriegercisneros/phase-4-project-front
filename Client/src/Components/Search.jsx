@@ -19,7 +19,7 @@ function Search()
 
     useEffect(()=>
     {
-        fetch("http://127.0.0.1:5555/petfinder_api_call")
+        fetch("http://127.0.0.1:8000/petfinder_api_call")
         .then(res=>res.json())
         .then(data=>{
             setIsLoaded(true)
@@ -27,7 +27,7 @@ function Search()
         })
         .catch(error=>console.log(error))
 
-        fetch("http://127.0.0.1:5555/saved_pets")
+        fetch("http://127.0.0.1:8000/saved_pets")
         .then(res=>res.json())
         .then(data=>setUsersSavedPets(data))
     },[])
@@ -55,7 +55,7 @@ function Search()
             photo:getDogPic(p),
             petfinder_id:p.id
         }
-        fetch(`http://127.0.0.1:5555/saved_pets`,
+        fetch(`http://127.0.0.1:8000/saved_pets`,
         {
             method: 'POST',
             headers: 
@@ -79,7 +79,7 @@ function Search()
     }
 
     function handleLogOut(e){
-        fetch()
+
     }
 
     return (

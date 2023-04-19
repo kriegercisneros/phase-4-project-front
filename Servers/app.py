@@ -48,19 +48,28 @@ def users():
         user_dict_list=[users.to_dict() for users in u]
         return make_response(jsonify(user_dict_list), 200)
     if request.method =='POST':
+        email=request.json['email']
+        password=request.json['password']
+        user_exist = User.query.filter(User.email==email).first()
+        if user_exist is not None:
+            return jsonify({'error':'user already exists'}), 409
         data=request.get_json()
+        print(data['email'])
         try:
             user = User(
                 type=data['type'],
                 company_name=data['company_name'],
-                # password=data['password'],
-                email=data['email'],
-                location=int(data['location']), 
+                email=email,
+                # location=['location'], 
                 shelter_id=data['shelter_id']
             )
-            user.password_hash = data['password']
+            print(user)
+            #my password hash is in a different file, tutorial guy has his password hased and encrypted by bcrypt right here
+            user.password_hash = password
             db.session.add(user)
             db.session.commit()
+            #setting sessions id here to equal the new user_id that we JUST CREATED!
+            session['user_id'] = user.id
         except Exception as e:
             return make_response({"errors": [e.__str__()]}, 422)
         
@@ -69,53 +78,90 @@ def users():
 #Creates a login route that checks if the user exists
 @app.route('/login', methods=['POST'])
 def login():
-    if request.method=='POST':
+    if request.method == 'POST':
         jsoned_request = request.get_json()
         user = User.query.filter(User.email == jsoned_request['email']).first()
         if user and user.authenticate(jsoned_request["password"]):
+            #this is saying "user_id" in sessions is equal to the user
+            #id we have found in the user table
             session["user_id"] = user.id
-            return make_response({'message':'Log in succesful'}, 200)
+            # session['logged_in'] = True
+            print(session)
+            return make_response(jsonify(user.to_dict()), 200)
         else:
-            return make_response({"message":"Log in failed"}, 500)
+            return make_response(jsonify({"login":"Invalid User"}), 401)
         
+@app.route('/info')
+def get_curr_user():
+    user_id=session.get('user_id')
+    if not user_id:
+        return jsonify({"error":"unauthorized"}), 401
+    user=User.query.filter(User.id==user_id).first()
+    return jsonify({
+        "id":user.id, 
+        "email":user.email
+    })
 # #save the user to a session 
 # #attempts to retrieve the user's info from the db using the ID.  if the user is found, info is returned as a json obj
-@app.route('/checklogin', methods=['GET'])
-def check_login():
-    if request.method =='GET':
-        user_id = session.get('user_id')
-        if user_id:
-            user=User.query.filter(User.id ==session['user_id']).first()
-            return make_response({"message":True},200)
-    return make_response({"message":False},200)
+# @app.route('/checklogin', methods=['GET'])
+# def check_login():
+#     if request.method =='GET':
+#         user_id = session.get('user_id')
+#         if user_id:
+#             user=User.query.filter(User.id ==session['user_id']).first()
+#             return make_response(jsonify(user.to_dict()), 200)
+#     return make_response({"message":"login checked"})
+
+#funcitonality here to check to see if we are loggedin
+# @app.route('/checklogin')
+# def check_login():
+#         user_id = session.get('user_id')
+#         if user_id != None:
+#             return make_response({"logged_in":"True"}, 200)
+#         return make_response({"logged_in":"False"}, 200)
+
 
 # #this is some basic code to validate or not whether or not a user is allowed to access specific resources
 # #we will use this for allowing the admin to see the requests from a user
+# @app.route('/logged_user')
+# def logged_user():
+#     user_id =session.get('user_id')
+#     if user_id:
+#         user=User.query.filter(User.id == session["user_id"]).first()
+#         return make_response(jsonify(user.to_dict()), 200)
 
-@app.route('/logout', methods=['DELETE'])
-def logout():
-    session['user_id']=None
-    return make_response(jsonify({"login":"loggedout"}),200)
+#this is david's code
+# @app.route('/logout', methods=['DELETE'])
+# def logout():
+#     session['user_id']=None
+#     print(session['user_id'])
+#     return make_response(jsonify({"login":"loggedout"}),200)
 
-@app.route('/gettype', methods=['GET'])
-def get_type():
-    if session.get("valid"):
-        user=User.query.filter(User.id == session['user_id']).first()
-        return make_response(jsonify({"user_type":user.type}), 200)
-    else:
-        return make_response(jsonify({"login" :"invalid user"}),400)
+#tuturial guy's idea to make a logout a post and pop the session
+@app.route('/logout', methods=['POST'])
+def User_Logout():
+    session.pop('user_id')
+    return '200'
+
+# @app.route('/gettype', methods=['GET'])
+# def get_type():
+#     if session.get("valid"):
+#         user=User.query.filter(User.id == session['user_id']).first()
+#         return make_response(jsonify({"user_type":user.type}), 200)
+#     else:
+#         return make_response(jsonify({"login" :"invalid user"}),400)
     
 
-@app.before_request
-def validate():
-    if 'user_id' in session:
-        user = User.query.filter(User.id == session["user_id"]).first()
-        if user and user.type == 'user':
-            session["valid"] = True
-        else:
-            session["valid"] = False
-    else:
-        session["valid"] = False
+# @app.before_request
+# def validate():
+#     if 'user_id' in session:
+#         user = User.query.filter(User.id == session["user_id"]).first()
+#         if user and user.type == 'user':
+#             session["valid"] = True
+#         else:
+#             session["valid"] = False
+#     else:
+#         session["valid"] = False
 
 
 #     response.set_cookie('mouse', 'Cookie')

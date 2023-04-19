@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import no_image from "../images/no_image.jpg";
 import { useNavigate } from "react-router-dom";
 
+
 function Search()
 {
 
@@ -79,11 +80,27 @@ function Search()
     }
 
     function handleLogOut(e){
+<<<<<<< HEAD
 
+=======
+        fetch('http://127.0.0.1:8000/logout',
+        {
+            method: 'DELETE',
+            headers: 
+            {
+                "Content-Type":'application/json',
+                "Accepts":"application/json"
+            }
+        })
+        .then(res=>res.json())
+        .then(()=>console.log("loggedout"))
+        .then(()=>nav('/'))
+>>>>>>> sarah
     }
 
     return (
         <>
+        <div>Hi put user here it is going to be tougher than i thought</div>
             <button onClick={e=>nav('/pets')}>View Favorited Pets</button>
             <button onClick={e=>handleLogOut(e)}>Logout</button>
             {isLoaded?

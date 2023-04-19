@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 
-function SavedPetsView()
+function SavedPetsView({user, setUser})
 {
 
     ///////////////////////////////////////////

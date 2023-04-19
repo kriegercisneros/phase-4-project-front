@@ -5,8 +5,25 @@ import { useNavigate } from 'react-router-dom'
 
 // const Basic = () => (
     
-function Basic(){
+function Login({user, setUser}){
     const nav=useNavigate()
+  
+//////////////////////////
+// UseEffect checks 
+// if user is logged in 
+// when the load homepage
+//////////////////////////   
+
+    useEffect(()=>
+    {   
+        fetch('/api/info')
+        .then(r=>r.json())
+        .then(data=>setUser(data['id']))
+    }, [])
+
+    if(user){
+      return nav('/search')
+    }
 
     return(
         <div>
@@ -26,17 +43,28 @@ function Basic(){
             }}
             onSubmit={(values, { setSubmitting }) => {
 
-           fetch('http://127.0.0.1:8000/login', {
+           fetch('/api/login', {
                   method:'POST',
                   headers: {
                       'Content-Type':'application/json'
                   }, 
                   body: JSON.stringify(values)
               })
-                  .then((r)=>r.json())
-                  .then(()=>nav('/search'))
-              // console.log(JSON.stringify(values, null, 2));
-                  .then(setSubmitting(false))
+                  .then((r)=>
+                  {
+                    console.log(r.status)
+                    return  r.json()
+                  })  
+                  .then(data=>
+                    {
+                      if (data['id'])
+                      {
+                        setUser(data['id'])
+                      }
+                      else{
+                        alert("Please log in.")
+                      }
+                    })
             }}
           >
             {({ isSubmitting }) => (
@@ -45,7 +73,7 @@ function Basic(){
                 <ErrorMessage name="email" component="div"/>
                 <Field type="password" name="password" placeholder="Password"/>
                 <ErrorMessage name="password" component="div" />
-                <button type="submit" disabled={isSubmitting}>
+                <button type="submit">
                   Submit
                 </button>
               </Form>
@@ -61,4 +89,4 @@ function Basic(){
       );
 }
 
-export default Basic;
+export default Login;

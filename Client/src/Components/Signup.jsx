@@ -3,7 +3,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
-function Basic (){
+function Signup ({user, setUser}){
   const nav=useNavigate()
 
 
@@ -65,7 +65,7 @@ function Basic (){
   )
 };
 
-export default Basic;
+export default Signup;
 
 
 // onSubmit={(values, { setSubmitting }) => {

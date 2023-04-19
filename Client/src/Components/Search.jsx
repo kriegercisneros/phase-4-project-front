@@ -4,7 +4,7 @@ import no_image from "../images/no_image.jpg";
 import { useNavigate } from "react-router-dom";
 
 
-function Search()
+function Search({user, setUser})
 {
 
     ///////////////////////////////////////////
@@ -30,7 +30,15 @@ function Search()
 
         fetch("http://127.0.0.1:8000/saved_pets")
         .then(res=>res.json())
-        .then(data=>setUsersSavedPets(data))
+        .then(data=>{
+            if (data)
+            {
+                setUsersSavedPets(data)
+            }
+            else{
+                alert("WTF!!")
+            }
+        })
     },[])
 
 
@@ -54,7 +62,8 @@ function Search()
             organization_id:p.organization_id,
             species:p.species, 
             photo:getDogPic(p),
-            petfinder_id:p.id
+            petfinder_id:p.id,
+            user_id:user
         }
         fetch(`http://127.0.0.1:8000/saved_pets`,
         {
@@ -72,17 +81,18 @@ function Search()
 
     function checkIfAlreadySaved(p)
     {
-        let ids=[]
-        usersSavedPets.forEach(pet=>ids.push(pet.petfinder_id))
-        if (ids.includes(p.id)){
-            return true
+        if (usersSavedPets.length!==0){
+            let ids=[]
+            usersSavedPets.forEach(pet=>ids.push(pet.petfinder_id))
+            if (ids.includes(p.id)){
+                return true
+            }
         }
     }
 
-    function handleLogOut(e){
-<<<<<<< HEAD
+    console.log(usersSavedPets)
 
-=======
+    function handleLogOut(e){
         fetch('http://127.0.0.1:8000/logout',
         {
             method: 'DELETE',
@@ -95,7 +105,6 @@ function Search()
         .then(res=>res.json())
         .then(()=>console.log("loggedout"))
         .then(()=>nav('/'))
->>>>>>> sarah
     }
 
     return (

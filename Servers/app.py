@@ -46,11 +46,9 @@ def users():
     if request.method=='GET':
         u=User.query.all()
         user_dict_list=[users.to_dict() for users in u]
-        print(user_dict_list)
         return make_response(jsonify(user_dict_list), 200)
     if request.method =='POST':
         data=request.get_json()
-        print(data)
         try:
             user = User(
                 type=data['type'],
@@ -60,7 +58,6 @@ def users():
                 location=int(data['location']), 
                 shelter_id=data['shelter_id']
             )
-            print(user)
             user.password_hash = data['password']
             db.session.add(user)
             db.session.commit()
@@ -79,9 +76,17 @@ def login():
        # print(user)
         if user and user.authenticate(jsoned_request["password"]):
             session["user_id"] = user.id
-            return make_response(jsonify(user.to_dict()), 200)
+            resp= make_response(jsonify(user.to_dict()), 200)
+            resp.set_cookie("Cookie Key", "Example value")
+            return resp
         else:
             return make_response(jsonify({"login":"Invalid User"}), 500)
+        
+@app.route('/getcookie')
+def getcookie():
+    req=request.cookies.get('session')
+    print(req)
+    return make_response({},200)
         
 # #save the user to a session 
 # #attempts to retrieve the user's info from the db using the ID.  if the user is found, info is returned as a json obj

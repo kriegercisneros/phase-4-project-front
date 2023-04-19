@@ -10,7 +10,7 @@ function Basic(){
 
     return(
         <div>
-          <h1>Hello, please login.</h1>
+          <h1>Welcome to Re_Treat!</h1>
           <Formik
             initialValues={{ email: '', password: '' }}
             validate={values => {
@@ -25,10 +25,12 @@ function Basic(){
               return errors;
             }}
             onSubmit={(values, { setSubmitting }) => {
+              
               fetch('http://127.0.0.1:8000/checklogin')
                   .then((r)=>r.json())
                   .then(setSubmitting(false))
-              fetch('http://127.0.0.1:8000/login', {
+
+           fetch('http://127.0.0.1:8000/login', {
                   method:'POST',
                   headers: {
                       'Content-Type':'application/json'
@@ -36,17 +38,16 @@ function Basic(){
                   body: JSON.stringify(values)
               })
                   .then((r)=>r.json())
-                  .then(data=>console.log(data))
-                  //.then(()=>nav('/search'))
+                  .then(()=>nav('/search'))
               // console.log(JSON.stringify(values, null, 2));
                   .then(setSubmitting(false))
             }}
           >
             {({ isSubmitting }) => (
               <Form>
-                <Field type="email" name="email" />
-                <ErrorMessage name="email" component="div" />
-                <Field type="password" name="password" />
+                <Field type="email" name="email" placeholder='Email' />
+                <ErrorMessage name="email" component="div"/>
+                <Field type="password" name="password" placeholder="Password"/>
                 <ErrorMessage name="password" component="div" />
                 <button type="submit" disabled={isSubmitting}>
                   Submit
@@ -54,6 +55,12 @@ function Basic(){
               </Form>
             )}
           </Formik>
+          <br/>
+          <h3>Don't have an account?</h3>
+          <button onClick={e=>nav('/signup')}>Signup</button>
+          <br/><br/>
+          <h3>Or try us for free!</h3>
+          <button onClick={e=>nav('/search')}>Guest</button>
         </div>
       );
 }

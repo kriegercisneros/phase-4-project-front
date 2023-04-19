@@ -11,7 +11,7 @@ import SavedPetsView from './SavedPetsView';
 
 function App() {
   //const [count, setCount] = useState(0)
-
+ //this is where david has his use effect to check if a user is logged on or not
   return (
     <div className="App">
       <Routes>

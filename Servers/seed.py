@@ -9,13 +9,13 @@ from models import db, User, SavedPets
 
 with app.app_context():
     print("Deleting Users...")
-    User.query.delete()
     SavedPets.query.delete()
+    User.query.delete()
     
     print("Creating users...")
-    new_user_1 = User(company_name="Mountain Ski Lodge",type="user", email='hi@mail.com', password_hash="notEncrypted", location = 80210)
-    new_user_2 = User(company_name="Ocean Surf Resort",type="user", email='hih@mail.com', password_hash="notEncrypted", location = 80210)
-    new_user_3 = User(company_name="Up In Da Sky",type="user", email='hid@mail.com', password_hash="notEncrypted", location = 80210)
+    new_user_1 = User(company_name="Mountain Ski Lodge",type="user", email='hi@mail.com', password_hash="notEncrypted")
+    new_user_2 = User(company_name="Ocean Surf Resort",type="user", email='hih@mail.com', password_hash="notEncrypted")
+    new_user_3 = User(company_name="Up In Da Sky",type="user", email='hid@mail.com', password_hash="notEncrypted")
     users = [new_user_1,new_user_2,new_user_3]
     db.session.add_all(users)
     db.session.commit()

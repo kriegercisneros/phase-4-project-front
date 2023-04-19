@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import no_image from "../images/no_image.jpg";
 import { useNavigate } from "react-router-dom";
 
+
 function Search()
 {
 
@@ -19,7 +20,7 @@ function Search()
 
     useEffect(()=>
     {
-        fetch("http://127.0.0.1:5555/petfinder_api_call")
+        fetch("http://127.0.0.1:8000/petfinder_api_call")
         .then(res=>res.json())
         .then(data=>{
             setIsLoaded(true)
@@ -27,7 +28,7 @@ function Search()
         })
         .catch(error=>console.log(error))
 
-        fetch("http://127.0.0.1:5555/saved_pets")
+        fetch("http://127.0.0.1:8000/saved_pets")
         .then(res=>res.json())
         .then(data=>setUsersSavedPets(data))
     },[])
@@ -79,11 +80,23 @@ function Search()
     }
 
     function handleLogOut(e){
-        fetch()
+        fetch('http://127.0.0.1:8000/logout',
+        {
+            method: 'DELETE',
+            headers: 
+            {
+                "Content-Type":'application/json',
+                "Accepts":"application/json"
+            }
+        })
+        .then(res=>res.json())
+        .then(()=>console.log("loggedout"))
+        .then(()=>nav('/'))
     }
 
     return (
         <>
+        <div>Hi put user here it is going to be tougher than i thought</div>
             <button onClick={e=>nav('/pets')}>View Favorited Pets</button>
             <button onClick={e=>handleLogOut(e)}>Logout</button>
             {isLoaded?

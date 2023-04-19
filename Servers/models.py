@@ -24,13 +24,11 @@ class User(db.Model, SerializerMixin):
     serialize_rules=("-saved_pets.users_backref",)
 
     id = db.Column(db.Integer, primary_key=True)
-    type = db.Column(db.String, nullable = False)
-    company_name = db.Column(db.String, unique = True, nullable = False)
-    #this needs to have an _ to set to private
+    type = db.Column(db.String)
+    company_name = db.Column(db.String, unique = True)
     _password_hash = db.Column(db.String)
     email = db.Column(db.String, unique = True, nullable = False)
-    location = db.Column(db.Integer)
-    #need to be connected?
+    # location = db.Column(db.String)
     shelter_id=db.Column(db.String)
 
     saved_pets=db.relationship('SavedPets', backref='users_backref')

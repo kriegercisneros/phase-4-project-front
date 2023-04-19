@@ -5,13 +5,14 @@ import { useNavigate } from 'react-router-dom'
 
 // const Basic = () => (
     
-function Basic(){
+function Basic({styles}){
     const nav=useNavigate()
 
     return(
         <div>
           <h1>Hello, please login.</h1>
           <Formik
+
             initialValues={{ email: '', password: '' }}
             validate={values => {
               const errors = {};
@@ -36,6 +37,7 @@ function Basic(){
                   body: JSON.stringify(values)
               })
                   .then((r)=>r.json())
+
                   .then(()=>nav('/search'))
               // console.log(JSON.stringify(values, null, 2));
                   .then(setSubmitting(false))
@@ -43,6 +45,7 @@ function Basic(){
           >
             {({ isSubmitting }) => (
               <Form>
+                <label htmlFor='Email'>Email</label>
                 <Field type="email" name="email" />
                 <ErrorMessage name="email" component="div" />
                 <Field type="password" name="password" />

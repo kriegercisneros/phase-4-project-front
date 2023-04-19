@@ -8,6 +8,8 @@ from services import app,bcrypt,db
 import os
 from flask_cors import CORS
 from dotenv import load_dotenv
+from datetime import timedelta
+from flask_session import Session
 
 app = Flask(__name__)
 
@@ -16,6 +18,12 @@ load_dotenv()
 #use os.environ.get() to get the data from the .env file
 
 #this is now in services
+
+app.config['SESSION_PERMANENT'] = True
+app.config['SESSION_COOKIE_SECURE'] = True
+app.config['SESSION_TYPE'] = 'filesystem'
+app.permanent_session_lifetime = timedelta(minutes=30)
+Session(app)
 
 app.secret_key = os.environ.get("secretkey")
 
@@ -37,6 +45,7 @@ client_secret=os.environ.get('secret_key')
 
 @app.route('/')
 def index():
+    print(session)
     return make_response(
         {"message": "Hello Jackie!"}
     )
@@ -74,12 +83,13 @@ def users():
         except Exception as e:
             return make_response({"errors": [e.__str__()]}, 422)
         
-        return make_response(jsonify(user.to_dict()), 201)
+        return make_response(jsonify(user.to_dict(), {"message":"registered successfully"}), 201)
 
 #Creates a login route that checks if the user exists
 @app.route('/login', methods=['POST'])
 def login():
     if request.method == 'POST':
+        print(session)
         jsoned_request = request.get_json()
         user = User.query.filter(User.email == jsoned_request['email']).first()
         if user and user.authenticate(jsoned_request["password"]):
@@ -88,9 +98,9 @@ def login():
             session["user_id"] = user.id
             # session['logged_in'] = True
             print(session)
-            return make_response(jsonify(user.to_dict()), 200)
+            return make_response(jsonify(user.to_dict(), {"message":"You are successfully logged in."}), 200)
         else:
-            return make_response(jsonify({"login":"Invalid User"}), 401)
+            return make_response(jsonify({"login":"Unauthorized"}), 401)
         
 @app.route('/info')
 def get_curr_user():
@@ -143,6 +153,8 @@ def get_curr_user():
 def User_Logout():
     session.pop('user_id')
     return '200'
+
+
 
 # @app.route('/gettype', methods=['GET'])
 # def get_type():
@@ -212,6 +224,7 @@ class AllSavedPets(Resource):
 
 class APICall(Resource):
     def get(self):
+        # user_id=session.get('user_id')
         token=get_new_token()
         url='https://api.petfinder.com/v2/animals?organization=co52'
         headers1={"Authorization": f'Bearer {token}'}
@@ -219,7 +232,9 @@ class APICall(Resource):
         rb=make_response(res.text)
         rb.status_code=200
         rb.headers={'Content-Type':"application/json"}
-        return rb
+        print(session)
+        # return(user_id)
+        # return rb
     
 def get_new_token():
     headers = {'Content-Type': 'application/x-www-form-urlencoded',}

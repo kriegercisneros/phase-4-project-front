@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState , useEffect } from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useNavigate } from 'react-router-dom'
 
@@ -25,10 +25,6 @@ function Basic(){
               return errors;
             }}
             onSubmit={(values, { setSubmitting }) => {
-              
-              fetch('http://127.0.0.1:8000/checklogin')
-                  .then((r)=>r.json())
-                  .then(setSubmitting(false))
 
            fetch('http://127.0.0.1:8000/login', {
                   method:'POST',

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Route, Routes } from "react-router-dom";
 import Login from './Login';
 import Search from './Search';
@@ -11,6 +11,13 @@ import SavedPetsView from './SavedPetsView';
 
 function App() {
   //const [count, setCount] = useState(0)
+  const [loggedIn,setLoggedIn]=useState(false)
+  
+  useEffect(()=>{
+    fetch('http://127.0.0.1:8000/checklogin')
+    .then((r)=>r.json())
+    .then(data=>console.log(data))
+  },[])
 
   return (
     <div className="App">

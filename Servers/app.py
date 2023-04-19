@@ -71,22 +71,12 @@ def users():
 def login():
     if request.method=='POST':
         jsoned_request = request.get_json()
-        print(jsoned_request)
         user = User.query.filter(User.email == jsoned_request['email']).first()
-       # print(user)
         if user and user.authenticate(jsoned_request["password"]):
             session["user_id"] = user.id
-            resp= make_response(jsonify(user.to_dict()), 200)
-            resp.set_cookie("Cookie Key", "Example value")
-            return resp
+            return make_response({'message':'Log in succesful'}, 200)
         else:
-            return make_response(jsonify({"login":"Invalid User"}), 500)
-        
-@app.route('/getcookie')
-def getcookie():
-    req=request.cookies.get('session')
-    print(req)
-    return make_response({},200)
+            return make_response({"message":"Log in failed"}, 500)
         
 # #save the user to a session 
 # #attempts to retrieve the user's info from the db using the ID.  if the user is found, info is returned as a json obj
@@ -96,8 +86,8 @@ def check_login():
         user_id = session.get('user_id')
         if user_id:
             user=User.query.filter(User.id ==session['user_id']).first()
-            return make_response(jsonify(user.to_dict()), 200)
-    return make_response({"message":"login checked"})
+            return make_response({"message":True},200)
+    return make_response({"message":False},200)
 
 # #this is some basic code to validate or not whether or not a user is allowed to access specific resources
 # #we will use this for allowing the admin to see the requests from a user

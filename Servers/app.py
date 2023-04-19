@@ -20,7 +20,7 @@ load_dotenv()
 #this is now in services
 
 app.config['SESSION_PERMANENT'] = True
-app.config['SESSION_COOKIE_SECURE'] = True
+app.config['SESSION_COOKIE_SECURE'] = False
 app.config['SESSION_TYPE'] = 'filesystem'
 app.permanent_session_lifetime = timedelta(minutes=30)
 Session(app)
@@ -101,10 +101,12 @@ def login():
             return make_response(jsonify(user.to_dict(), {"message":"You are successfully logged in."}), 200)
         else:
             return make_response(jsonify({"login":"Unauthorized"}), 401)
+
         
 @app.route('/info')
 def get_curr_user():
     user_id=session.get('user_id')
+    print(session)
     if not user_id:
         return jsonify({"error":"unauthorized"}), 401
     user=User.query.filter(User.id==user_id).first()
@@ -112,6 +114,8 @@ def get_curr_user():
         "id":user.id, 
         "email":user.email
     })
+
+
 # #save the user to a session 
 # #attempts to retrieve the user's info from the db using the ID.  if the user is found, info is returned as a json obj
 # @app.route('/checklogin', methods=['GET'])
@@ -154,8 +158,6 @@ def User_Logout():
     session.pop('user_id')
     return '200'
 
-
-
 # @app.route('/gettype', methods=['GET'])
 # def get_type():
 #     if session.get("valid"):
@@ -164,6 +166,7 @@ def User_Logout():
 #     else:
 #         return make_response(jsonify({"login" :"invalid user"}),400)
     
+
 
 # @app.before_request
 # def validate():
@@ -224,7 +227,7 @@ class AllSavedPets(Resource):
 
 class APICall(Resource):
     def get(self):
-        # user_id=session.get('user_id')
+        user_id=session.get('user_id')
         token=get_new_token()
         url='https://api.petfinder.com/v2/animals?organization=co52'
         headers1={"Authorization": f'Bearer {token}'}

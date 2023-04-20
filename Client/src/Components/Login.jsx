@@ -59,9 +59,9 @@ function Login({user, setUser}){
                   })  
                   .then(data=>
                     {
-                      if (data['id'])
+                      if (data[0]['id'])
                       {
-                        setUser(data['id'])
+                        setUser(data[0]['id'])
                       }
                       else{
                         alert("Please log in.")

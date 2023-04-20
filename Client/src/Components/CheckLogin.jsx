@@ -5,7 +5,7 @@ export default function App({Component}){
     const [loggedIn, setLoggedIn] = useState(false)
 
     useEffect(()=>{
-        fetch('http://127.0.0.1:8000/info')
+        fetch('/api/info')
         .then(resp=>resp.json())
         .then(data=>setLoggedIn(data.logged_in))
     }, [])

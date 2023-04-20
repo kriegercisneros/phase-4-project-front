@@ -20,7 +20,7 @@ function Search({user, setUser})
 
     useEffect(()=>
     {
-        fetch("http://127.0.0.1:8000/petfinder_api_call")
+        fetch("/api/petfinder_api_call")
         .then(res=>res.json())
         .then(data=>{
             setIsLoaded(true)
@@ -28,7 +28,7 @@ function Search({user, setUser})
         })
         .catch(error=>console.log(error))
 
-        fetch("http://127.0.0.1:8000/saved_pets")
+        fetch("/api/saved_pets")
         .then(res=>res.json())
         .then(data=>{
             if (data)
@@ -65,7 +65,7 @@ function Search({user, setUser})
             petfinder_id:p.id,
             user_id:user
         }
-        fetch(`http://127.0.0.1:8000/saved_pets`,
+        fetch(`/api/saved_pets`,
         {
             method: 'POST',
             headers: 
@@ -93,7 +93,7 @@ function Search({user, setUser})
     console.log(usersSavedPets)
 
     function handleLogOut(e){
-        fetch('http://127.0.0.1:8000/logout',
+        fetch('/api/logout',
         {
             method: 'DELETE',
             headers: 

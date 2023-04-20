@@ -9,7 +9,7 @@ import os
 from flask_cors import CORS
 from dotenv import load_dotenv
 from datetime import timedelta
-from flask_session import Session
+# from flask_session import Session
 
 app = Flask(__name__)
 
@@ -19,11 +19,11 @@ load_dotenv()
 
 #this is now in services
 
-app.config['SESSION_PERMANENT'] = True
-app.config['SESSION_COOKIE_SECURE'] = False
-app.config['SESSION_TYPE'] = 'filesystem'
-app.permanent_session_lifetime = timedelta(minutes=30)
-Session(app)
+# app.config['SESSION_PERMANENT'] = True
+# app.config['SESSION_COOKIE_SECURE'] = False
+# app.config['SESSION_TYPE'] = 'filesystem'
+# app.permanent_session_lifetime = timedelta(minutes=30)
+# Session(app)
 
 app.secret_key = os.environ.get("secretkey")
 

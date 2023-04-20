@@ -60,7 +60,8 @@ def users():
         email=request.json['email']
         password=request.json['password']
         user_exist = User.query.filter(User.email==email).first()
-        if user_exist is not None:
+        company_exist=User.query.filter(User.company_name==request.json['company_name'])
+        if user_exist is not None and company_exist is not None:
             return jsonify({'error':'user already exists'}), 409
         data=request.get_json()
         print(data['email'])

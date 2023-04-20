@@ -59,11 +59,11 @@ function Login({user, setUser}){
                   })  
                   .then(data=>
                     {
-                      if (data[0]['id'])
+                      try
                       {
                         setUser(data[0]['id'])
                       }
-                      else{
+                      catch{
                         alert("Please log in.")
                       }
                     })

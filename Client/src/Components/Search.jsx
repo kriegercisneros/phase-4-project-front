@@ -30,11 +30,11 @@ function Search({user, setUser})
         fetch("/api/saved_pets")
         .then(res=>res.json())
         .then(data=>{
-            if (data)
+            try 
             {
                 setUsersSavedPets(data)
             }
-            else{
+            catch{
                 alert("WTF!!")
             }
         })

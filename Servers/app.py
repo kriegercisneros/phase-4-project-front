@@ -77,8 +77,10 @@ def users():
             user.password_hash = password
             db.session.add(user)
             db.session.commit()
+            print(user.id)
             #setting sessions id here to equal the new user_id that we JUST CREATED!
             session['user_id'] = user.id
+            session["user_type"] = user.type
         except Exception as e:
             return make_response({"errors": [e.__str__()]}, 422)
         
@@ -95,6 +97,7 @@ def login():
             #this is saying "user_id" in sessions is equal to the user
             #id we have found in the user table
             session["user_id"] = user.id
+            session["user_type"] = user.type
             # session['logged_in'] = True
             print(session)
             return make_response(jsonify(user.to_dict(), {"message":"You are successfully logged in."}), 200)
@@ -182,6 +185,7 @@ def get_curr_user():
 def User_Logout():
     print(session)
     session.pop('user_id')
+    session.pop('user_type')
     return '200'
 
 # @app.route('/gettype', methods=['GET'])

@@ -12,15 +12,14 @@ function Search({user, setUser})
     // here and in SavedPetsView. Should be 
     // refactored to have it at the App level
     ///////////////////////////////////////////
-    
+    console.log(user)
     const nav=useNavigate();
     const [searchedPets, setSearchedPets]=useState([])
     const [usersSavedPets, setUsersSavedPets]=useState([])
     const [isLoaded,setIsLoaded]=useState(false)
-
     useEffect(()=>
     {
-        fetch("http://127.0.0.1:8000/petfinder_api_call")
+        fetch("/api/petfinder_api_call")
         .then(res=>res.json())
         .then(data=>{
             setIsLoaded(true)
@@ -28,7 +27,7 @@ function Search({user, setUser})
         })
         .catch(error=>console.log(error))
 
-        fetch("http://127.0.0.1:8000/saved_pets")
+        fetch("/api/saved_pets")
         .then(res=>res.json())
         .then(data=>{
             if (data)
@@ -65,7 +64,7 @@ function Search({user, setUser})
             petfinder_id:p.id,
             user_id:user
         }
-        fetch(`http://127.0.0.1:8000/saved_pets`,
+        fetch(`/api/saved_pets`,
         {
             method: 'POST',
             headers: 
@@ -93,9 +92,9 @@ function Search({user, setUser})
     console.log(usersSavedPets)
 
     function handleLogOut(e){
-        fetch('http://127.0.0.1:8000/logout',
+        fetch('/api/logout',
         {
-            method: 'DELETE',
+            method: 'POST',
             headers: 
             {
                 "Content-Type":'application/json',
@@ -112,6 +111,8 @@ function Search({user, setUser})
         <div>Hi User</div>
             <button onClick={e=>nav('/pets')}>View Favorited Pets</button>
             <button onClick={e=>handleLogOut(e)}>Logout</button>
+            {/* also when we route here to edituserinfo, we need to pass user id from sessions*/}
+            <button onClick={e=>nav('/edituserinfo')}>Edit User Information</button>
             {isLoaded?
                 <>
                     {searchedPets.animals.map(p=>

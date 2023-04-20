@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom'
 
 function Login({user, setUser}){
     const nav=useNavigate()
-  
+    console.log(user)
 //////////////////////////
 // UseEffect checks 
 // if user is logged in 
@@ -59,9 +59,9 @@ function Login({user, setUser}){
                   })  
                   .then(data=>
                     {
-                      if (data['id'])
+                      if (data[0]['id'])
                       {
-                        setUser(data['id'])
+                        setUser(data[0]['id'])
                       }
                       else{
                         alert("Please log in.")

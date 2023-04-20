@@ -2,16 +2,13 @@ import React, { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useNavigate } from 'react-router-dom';
 
-export default function EditUserInfo() {
-  const nav = useNavigate();
-  const [user, setUser] = useState({
-    type: '',
-    company_name: '',
-    email: '',
-  });
+function EditUserInfo({user, setUser}) {
+    // console.log(user)
+    const nav = useNavigate();
 
   function handleSubmit(values, {setSubmitting}) {
-    fetch(`/api/update_user/<int:id>`, {
+    console.log(user)
+    fetch(`/api/updateuser/${user}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -19,13 +16,14 @@ export default function EditUserInfo() {
       body: JSON.stringify({
         type: values.type,
         company_name: values.company_name,
-        email: values.email,
-        password: values.password,
+        email: values.email
+        // password: values.password,
       }),
     })
     .then((resp) => resp.json())
     .then((data) => {
       setUser(data);
+    //   console.log(user)
       setSubmitting(false);
       nav('/search');
     })
@@ -35,18 +33,18 @@ export default function EditUserInfo() {
     <div>
         <h1>Edit User Information</h1>
             <Formik
-                initialValues={{ type: user.type || '', company_name: user.company_name || '', email: user.email || '', password:'' }}
-                validate={values => {
-                const errors = {};
-                return errors;
-                }}
+                initialValues={{ type:'', company_name: '', email: '', password:'' }}
+                // validate={values => {
+                // const errors = {};
+                // return errors;
+                // }}
                 onSubmit={handleSubmit}
             >
                 {({ isSubmitting }) => (
               <Form>
                 <div>
                 <label htmlFor="type">Type</label>
-                <Field type="text" name="type" value={user ? user.type : ''}/>
+                <Field type="text" name="type"/>
               </div>
               <div>
                 <label htmlFor="company_name">Company Name</label>
@@ -69,3 +67,5 @@ export default function EditUserInfo() {
     </div>
   )
 }
+
+export default EditUserInfo

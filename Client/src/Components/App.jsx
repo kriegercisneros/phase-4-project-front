@@ -11,14 +11,17 @@ import '../Styling/App.css'
 import SavedPetsView from './SavedPetsView';
 
 function App() {
+
+  const [user, setUser]=useState(undefined)
+
   return (
     <div className="App">
       <Routes>
-        <Route exact path='/' element={<Login/>}/>
-        <Route exact path = '/signup' element ={<Signup/>}/>
-        <Route exact path='/search' element={<Search/>}/>
-        <Route exact path='/pets' element={<SavedPetsView/>}/>
-        <Route exact path='/edituserinfo' element={<EditUserInfo/>}/>
+        <Route exact path='/' element={<Login user={user} setUser={setUser}/>}/>
+        <Route exact path = '/signup' element ={<Signup user={user} setUser={setUser}/>}/>
+        <Route exact path='/search' element={<Search user={user} setUser={setUser}/>}/>
+        <Route exact path='/pets' element={<SavedPetsView user={user} setUser={setUser}/>}/>
+        <Route exact path='/edituserinfo' element={<EditUserInfo user={user} setUser={setUser}/>}/>
       </Routes>
     </div>
   )

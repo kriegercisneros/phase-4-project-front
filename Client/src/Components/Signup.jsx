@@ -31,7 +31,7 @@ function Signup ({user, setUser}){
         }}
         onSubmit={(values, { setSubmitting }) => {
           console.log(values)
-          fetch('http://127.0.0.1:8000/users', {
+          fetch('/api/users', {
               method: 'POST', 
               headers: {
                   'Content-Type':'application/json'

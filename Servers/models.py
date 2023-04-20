@@ -8,20 +8,10 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.hybrid import hybrid_property
 from services import bcrypt,db
 
-# metadata = MetaData(naming_convention={
-#     "ix": "ix_%(column_0_label)s",
-#     "uq": "uq_%(table_name)s_%(column_0_name)s",
-#     "ck": "ck_%(table_name)s_`%(constraint_name)s`",
-#     "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
-#     "pk": "pk_%(table_name)s"
-#     })
-
-# db = SQLAlchemy(metadata=metadata)
-
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
 
-    serialize_rules=("-saved_pets.users_backref",)
+    serialize_rules=("-saved_pets.users_backref", "-retreats.users_backref",)
 
     id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.String)
@@ -31,6 +21,7 @@ class User(db.Model, SerializerMixin):
     # location = db.Column(db.String)
     shelter_id=db.Column(db.String)
 
+    retreats=db.relationship("Retreats", backref='users_backref')
     saved_pets=db.relationship('SavedPets', backref='users_backref')
 
     #a hybrid property is a property that can be accessed as either an instance attribute or a method call
@@ -50,15 +41,13 @@ class User(db.Model, SerializerMixin):
     def authenticate(self, password):
         return bcrypt.check_password_hash(self.password_hash, password.encode('utf-8'))
     
-
-
-
 class SavedPets(db.Model, SerializerMixin):
     __tablename__='saved_pets'
 
-    serialize_rules=('-users_backref',)
+    serialize_rules=('-users_backref',"-pet_retreats.saved_pets_backref",)
 
     id=db.Column(db.Integer, primary_key=True)
+    user_id=db.Column(db.Integer, db.ForeignKey('users.id'))
     name=db.Column(db.String)
     breed=db.Column(db.String)
     gender=db.Column(db.String)
@@ -66,4 +55,28 @@ class SavedPets(db.Model, SerializerMixin):
     species=db.Column(db.String)
     photo=db.Column(db.String)
     petfinder_id=db.Column(db.Integer)
+
+    pet_retreats=db.relationship("PetRetreat",backref="saved_pet_backref")
+
+class Retreat(db.Model, SerializerMixin):
+    __tablename__='retreats'
+
+    serialize_rules=('-pet_retreat_saved_pets.retreat_backref','-users_backref')
+
+    id=db.Column(db.Integer, primary_key=True)
     user_id=db.Column(db.Integer, db.ForeignKey('users.id'))
+    date=db.Column(db.String)
+    location=db.Column(db.String)
+    approved=db.Column(db.Boolean)
+    
+    pet_retreats_saved_pets=db.relationship('PetRetreat', backref='retreat_backref')
+
+class PetRetreat(db.Model, SerializerMixin):
+    __tablename__='petRetreats'
+
+    serialize_rules=('-retreat_backref', '-saved_pet_backref',)
+
+    id=db.Column(db.Integer, primary_key=True)
+    pet_id=db.Column(db.Integer, db.ForeignKey('saved_pets.id'))
+    retreat_id=db.Column(db.Integer, db.ForeignKey('retreats.id'))
+

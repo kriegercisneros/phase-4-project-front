@@ -14,7 +14,7 @@ function SavedPetsView({user, setUser})
     const [usersSavedPets, setUsersSavedPets]=useState([])
     const [isLoaded,setIsLoaded]=useState(false)
     const [clicked, setClicked] =useState(false)
-    const [pet, setPet]=useState('')
+    const [clickpet, setPet]=useState('')
     
 
     useEffect(()=>
@@ -76,14 +76,14 @@ function SavedPetsView({user, setUser})
                         {usersSavedPets.map(pet=>
                             <div key={pet.id} style={{minWidth:'300px', borderRadius:"3%"}} >
                                 <h3>{pet.name}</h3>
-                                <img style={{maxHeight:'225px', maxWidth:'300px', borderRadius:"3%"}} onClick={e=>{setPet(p.name);setClicked(!clicked)}} src={pet.photo}/><br/>
+                                <img style={{maxHeight:'225px', maxWidth:'300px', borderRadius:"3%"}} onClick={e=>{setPet(pet.name);setClicked(!clicked)}} src={pet.photo}/><br/>
                                 <button className='w3-bar-item w3-button' onClick={e=>handleDelete(pet)}>Unfavorite</button>
                                 <br/><br/>
-                                {pet==p.name ? 
+                                {clickpet==pet.name ? 
                                     <div id="myModal" className={clicked?"model-display":"modal-hidden"}>
                                         <div className="modal-content">
                                         <span className="close">&times;</span>
-                                        <p>{p.name}</p>
+                                        <p>{pet.name}</p>
                                         </div>
                                     </div>
                                 :

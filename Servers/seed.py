@@ -16,6 +16,7 @@ with app.app_context():
     new_user_1 = User(company_name="Mountain Ski Lodge",type="user", email='hi@mail.com', password_hash="notEncrypted")
     new_user_2 = User(company_name="Ocean Surf Resort",type="user", email='hih@mail.com', password_hash="notEncrypted")
     new_user_3 = User(company_name="Up In Da Sky",type="user", email='hid@mail.com', password_hash="notEncrypted")
+    admin=User(company_name="Denver Animal Shelter",type="admin", email='denver.animal@shelter.com', password_hash="allthedogs")
     users = [new_user_1,new_user_2,new_user_3]
     db.session.add_all(users)
     db.session.commit()

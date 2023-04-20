@@ -21,8 +21,8 @@ class User(db.Model, SerializerMixin):
     # location = db.Column(db.String)
     shelter_id=db.Column(db.String)
 
-    retreats=db.relationship("Retreats", backref='users_backref')
-    saved_pets=db.relationship('SavedPets', backref='users_backref')
+    retreats=db.relationship("Retreat", backref='users_backref', cascade = "all, delete, delete-orphan")
+    saved_pets=db.relationship('SavedPets', backref='users_backref', cascade = "all, delete, delete-orphan")
 
     #a hybrid property is a property that can be accessed as either an instance attribute or a method call
     #basically like the getter function
@@ -56,7 +56,7 @@ class SavedPets(db.Model, SerializerMixin):
     photo=db.Column(db.String)
     petfinder_id=db.Column(db.Integer)
 
-    pet_retreats=db.relationship("PetRetreat",backref="saved_pet_backref")
+    pet_retreats=db.relationship("PetRetreat",backref="saved_pet_backref", cascade = "all,delete,delete-orphan")
 
 class Retreat(db.Model, SerializerMixin):
     __tablename__='retreats'
@@ -69,7 +69,7 @@ class Retreat(db.Model, SerializerMixin):
     location=db.Column(db.String)
     approved=db.Column(db.Boolean)
     
-    pet_retreats_saved_pets=db.relationship('PetRetreat', backref='retreat_backref')
+    pet_retreats_saved_pets=db.relationship('PetRetreat', backref='retreat_backref', cascade = "all,delete,delete-orphan")
 
 class PetRetreat(db.Model, SerializerMixin):
     __tablename__='petRetreats'

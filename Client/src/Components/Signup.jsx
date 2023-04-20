@@ -66,28 +66,3 @@ function Signup ({user, setUser}){
 };
 
 export default Signup;
-
-
-// onSubmit={(values, { setSubmitting }) => {
-//     fetch('http://127.0.0.1:8000/users', {
-//     method: 'POST',
-//     headers: {
-//         'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify(values)
-//     })
-//     .then(response => {
-//         if (!response.ok) {
-//         throw new Error('Network response was not ok');
-//         }
-//         console.log(response.json());
-//         alert('Data has been submitted to the database!');
-//     })
-//     .catch(error => {
-//         console.error(error);
-//         alert('An error occurred while submitting the data.');
-//     })
-//     .finally(() => {
-//         setSubmitting(false);
-//     });
-// }}

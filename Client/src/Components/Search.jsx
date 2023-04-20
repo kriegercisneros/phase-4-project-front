@@ -12,12 +12,11 @@ function Search({user, setUser})
     // here and in SavedPetsView. Should be 
     // refactored to have it at the App level
     ///////////////////////////////////////////
-    
+    console.log(user)
     const nav=useNavigate();
     const [searchedPets, setSearchedPets]=useState([])
     const [usersSavedPets, setUsersSavedPets]=useState([])
     const [isLoaded,setIsLoaded]=useState(false)
-
     useEffect(()=>
     {
         fetch("/api/petfinder_api_call")
@@ -95,7 +94,7 @@ function Search({user, setUser})
     function handleLogOut(e){
         fetch('/api/logout',
         {
-            method: 'DELETE',
+            method: 'POST',
             headers: 
             {
                 "Content-Type":'application/json',
@@ -112,6 +111,8 @@ function Search({user, setUser})
         <div>Hi User</div>
             <button onClick={e=>nav('/pets')}>View Favorited Pets</button>
             <button onClick={e=>handleLogOut(e)}>Logout</button>
+            {/* also when we route here to edituserinfo, we need to pass user id from sessions*/}
+            <button onClick={e=>nav('/edituserinfo')}>Edit User Information</button>
             {isLoaded?
                 <>
                     {searchedPets.animals.map(p=>

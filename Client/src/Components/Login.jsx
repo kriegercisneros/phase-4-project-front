@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom'
 
 function Login({user, setUser}){
     const nav=useNavigate()
-  
+    console.log(user)
 //////////////////////////
 // UseEffect checks 
 // if user is logged in 

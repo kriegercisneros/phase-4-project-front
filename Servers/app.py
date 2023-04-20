@@ -101,7 +101,7 @@ def login():
         else:
             return make_response(jsonify({"login":"Unauthorized"}), 401)
 
-@app.route('/update_user/<int:id>', methods=['PATCH'])
+@app.route('/updateuser/<id>', methods=['PATCH'])
 def update_user(id):
     if request.method == 'PATCH':
         #unsure if we need to get sessions here or if it is ok with proxy now

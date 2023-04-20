@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Route, Routes } from "react-router-dom";
 import Login from './Login';
 import Search from './Search';
@@ -11,8 +11,6 @@ import '../Styling/App.css'
 import SavedPetsView from './SavedPetsView';
 
 function App() {
-  //const [count, setCount] = useState(0)
- //this is where david has his use effect to check if a user is logged on or not
   return (
     <div className="App">
       <Routes>
@@ -25,5 +23,4 @@ function App() {
     </div>
   )
 }
-
 export default App

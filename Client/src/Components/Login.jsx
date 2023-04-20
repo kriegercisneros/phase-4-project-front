@@ -55,13 +55,18 @@ function Login({user, setUser, type, setType}){
                 .then((r)=>{
                     console.log(r.status)
                     return r.json()
-                })  
-                .then(data=>{
-                    try{
+
+                  })  
+                  .then(data=>
+                    {
+                      try
+                      {
                         setUser(data[0]['id'])
-                    }
-                    catch{alert("Invalid Credintials")} 
-                })
+                      }
+                      catch{
+                        alert("Please log in.")
+                      }
+                    })
             }}
         >
             {({ isSubmitting }) => (

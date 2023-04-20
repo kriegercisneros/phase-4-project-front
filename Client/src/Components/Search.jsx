@@ -17,7 +17,7 @@ function Search({user, setUser})
     const [searchedPets, setSearchedPets]=useState([])
     const [usersSavedPets, setUsersSavedPets]=useState([])
     const [isLoaded,setIsLoaded]=useState(false)
-    const [toggle, setToggle]=useState(false)
+    const [clickPet, setClickPet]=useState('')
 
     useEffect(()=>
     {
@@ -96,12 +96,6 @@ function Search({user, setUser})
     }
 
 
-
-    function modalDisplay(pet){
-        setToggle(true)
-    }
-
-
     function handleLogOut(e){
         fetch('/api/logout',
         {
@@ -117,7 +111,7 @@ function Search({user, setUser})
         .then(()=>nav('/'))
     }
 
-    console.log(toggle)
+
     return (
 
         <div style={{marginLeft:'0px'}}>
@@ -133,7 +127,7 @@ function Search({user, setUser})
                     {searchedPets.animals.map(p=>
                     <div style={{minWidth:'300px', borderRadius:"3%"}} key={p.id}>
                         <h3>{p.name}</h3>
-                        <img style ={{maxHeight:'225px', maxWidth:'300px', borderRadius:"3%", margin:'auto'}} onClick={e=>setToggle(!toggle)} src={getDogPic(p)}/><br/>
+                        <img style ={{maxHeight:'225px', maxWidth:'300px', borderRadius:"3%", margin:'auto'}} onClick={e=>setClickPet(p.name)} src={getDogPic(p)}/><br/>
                         {
                             checkIfAlreadySaved(p) ?
                             <button className='w3-bar-item w3-button' onClick={e=>alert("Please go to saved pets page to view me!")}>Favorited Already</button>:
@@ -141,7 +135,7 @@ function Search({user, setUser})
                         }
                         <br/>
                         <br/>
-                        {toggle ? 
+                        {clickPet===p.name ?
                         <div id="myModal" className="modal">
                             <div className="modal-content">
                                 <span className="close">&times;</span>

@@ -35,10 +35,11 @@ function Search({user, setUser})
         .then(data=>{
             console.log(data)
             if (data)
+
             {
                 setUsersSavedPets(data)
             }
-            else{
+            catch{
                 alert("WTF!!")
             }
         })

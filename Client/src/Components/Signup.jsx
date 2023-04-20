@@ -3,10 +3,9 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
-function Signup ({user, setUser}){
+function Signup ({user, setUser, type, setType}){
+
   const nav=useNavigate()
-
-
   return (
     <div>
       <h1>Sign up To Create a Re_Treat!</h1>
@@ -39,7 +38,8 @@ function Signup ({user, setUser}){
               body: JSON.stringify(values)
           })
               .then((r)=> r.json())
-              .then((data)=>console.log(data))
+            //   .then(data=>console.log(data))
+              .then(data=>setUser(data[0]['id']))
           // console.log(JSON.stringify(values, null, 2));
               .then(setSubmitting(false))
               .then(nav('/search'))

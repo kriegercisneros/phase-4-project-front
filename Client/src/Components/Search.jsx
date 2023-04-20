@@ -22,6 +22,9 @@ function Search({user, setUser})
 
     useEffect(()=>
     {
+        if (user===undefined){
+            return nav('/')
+          }
         fetch("/api/petfinder_api_call")
         .then(res=>res.json())
         .then(data=>{
@@ -33,7 +36,6 @@ function Search({user, setUser})
         fetch("/api/saved_pets")
         .then(res=>res.json())
         .then(data=>{
-            console.log(data)
             try 
             {
                 setUsersSavedPets(data)
@@ -43,8 +45,6 @@ function Search({user, setUser})
             }
         })
     },[])
-
-    console.log(usersSavedPets)
 
     function getDogPic(p)
     {
@@ -117,12 +117,11 @@ function Search({user, setUser})
 
     return (
 
-        <div style={{marginLeft:'0px'}}>
+        <div style={{marginLeft:'0px', marginTop:'0px'}}>
             <div className="w3-sidebar w3-bar-block w3-white" style={{zIndex:"3","width":"250px"}}>
                 <h2 className="w3-container w3-display-container w3-padding-16g">Re_Treat</h2>
                 <button className='w3-bar-item w3-button'  onClick={e=>nav('/pets')}>View Favorited Pets</button>
                 <button className='w3-bar-item w3-button' onClick={e=>handleLogOut(e)}>Logout</button>
-                {/* also when we route here to edituserinfo, we need to pass user id from sessions*/}
                 <button className='w3-bar-item w3-button' onClick={e=>nav('/edituserinfo')}>Edit User Information</button>
             </div>
             {isLoaded?

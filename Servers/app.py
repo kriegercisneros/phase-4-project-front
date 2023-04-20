@@ -81,6 +81,7 @@ def users():
             return make_response(jsonify(user.to_dict(), {"message":"registered successfully"}), 201)
         except Exception as e:
             return make_response({"errors": [e.__str__()]}, 422)
+        
 
 
 #Creates a login route that checks if the user exists
@@ -99,8 +100,14 @@ def login():
         else:
             return make_response(jsonify({"login":"Unauthorized"}), 401)
 
-@app.route('/updateuser/<id>', methods=['PATCH'])
+@app.route('/updateuser/<id>', methods=['PATCH','GET'])
 def update_user(id):
+    if request.method=='GET':
+        user=User.query.filter(User.id==id).first().to_dict()
+        if user:
+            return make_response(jsonify(user), 200)
+        else:
+            return make_response(jsonify({"message":"Something went wrong"}), 200)
     if request.method == 'PATCH':
         #unsure if we need to get sessions here or if it is ok with proxy now
         # user_id = session.get("user_id")
@@ -121,13 +128,14 @@ def update_user(id):
         if "email" in data:
             # Check if the new email already exists in the database
             email_exists = User.query.filter(User.email == data["email"]).first()
-            if email_exists and email_exists.id != id:
+            if email_exists and email_exists.id != user.id:
                 return make_response(jsonify({"error": "Email already exists."}), 409)
             user.email = data["email"]
         if "password" in data:
             user.password_hash = bcrypt.generate_password_hash(data["password"]).decode('utf-8')
         
         # Commit the changes to the database
+        db.session.add(user)
         db.session.commit()
 
         return make_response(jsonify(user.to_dict(), {"message": "User updated successfully."}), 200)

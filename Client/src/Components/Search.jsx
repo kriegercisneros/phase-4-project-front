@@ -33,6 +33,7 @@ function Search({user, setUser})
         fetch("/api/saved_pets")
         .then(res=>res.json())
         .then(data=>{
+            console.log(data)
             if (data)
             {
                 setUsersSavedPets(data)
@@ -43,6 +44,7 @@ function Search({user, setUser})
         })
     },[])
 
+    console.log(usersSavedPets)
 
     function getDogPic(p)
     {

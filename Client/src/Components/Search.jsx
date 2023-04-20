@@ -126,7 +126,7 @@ function Search({user, setUser})
                     {searchedPets.animals.map(p=>
                     <div style={{minWidth:'300px', borderRadius:"3%"}} key={p.id}>
                         <h3>{p.name}</h3>
-                        <img style ={{maxHeight:'225px', maxWidth:'300px', borderRadius:"3%"}} src={getDogPic(p)}/><br/>
+                        <img style ={{maxHeight:'225px', maxWidth:'300px', borderRadius:"3%", margin:'auto'}} src={getDogPic(p)}/><br/>
                         {
                             checkIfAlreadySaved(p) ?
                             <button className='w3-bar-item w3-button' onClick={e=>alert("Please go to saved pets page to view me!")}>Favorited Already</button>:

@@ -116,7 +116,11 @@ function Search({user, setUser})
 
         <div style={{marginLeft:'0px'}}>
             <div className="w3-sidebar w3-bar-block w3-white" style={{zIndex:"3","width":"250px"}}>
+<<<<<<< HEAD
                 <h2 className="w3-container w3-display-container w3-padding-16">Re_Treat</h2>
+=======
+                <h2 className="w3-container w3-display-container w3-padding-16g">Re_Treat</h2>
+>>>>>>> sarah
                 <button className='w3-bar-item w3-button'  onClick={e=>nav('/pets')}>View Favorited Pets</button>
                 <button className='w3-bar-item w3-button' onClick={e=>handleLogOut(e)}>Logout</button>
                 {/* also when we route here to edituserinfo, we need to pass user id from sessions*/}

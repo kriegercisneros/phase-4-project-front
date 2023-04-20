@@ -60,35 +60,33 @@ def users():
         email=request.json['email']
         password=request.json['password']
         user_exist = User.query.filter(User.email==email).first()
-        if user_exist is not None:
+        company_exist=User.query.filter(User.company_name==request.json['company_name'])
+        if user_exist is not None and company_exist is not None:
             return jsonify({'error':'user already exists'}), 409
         data=request.get_json()
-        print(data['email'])
         try:
             user = User(
                 type=data['type'],
                 company_name=data['company_name'],
                 email=email,
-                # location=['location'], 
                 shelter_id=data['shelter_id']
             )
-            print(user)
             #my password hash is in a different file, tutorial guy has his password hased and encrypted by bcrypt right here
             user.password_hash = password
             db.session.add(user)
             db.session.commit()
+            print(user.id)
             #setting sessions id here to equal the new user_id that we JUST CREATED!
             session['user_id'] = user.id
+            return make_response(jsonify(user.to_dict(), {"message":"registered successfully"}), 201)
         except Exception as e:
             return make_response({"errors": [e.__str__()]}, 422)
-        
-        return make_response(jsonify(user.to_dict(), {"message":"registered successfully"}), 201)
+
 
 #Creates a login route that checks if the user exists
 @app.route('/login', methods=['POST'])
 def login():
     if request.method == 'POST':
-        print(session)
         jsoned_request = request.get_json()
         user = User.query.filter(User.email == jsoned_request['email']).first()
         if user and user.authenticate(jsoned_request["password"]):

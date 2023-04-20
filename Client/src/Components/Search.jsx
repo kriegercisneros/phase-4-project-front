@@ -12,12 +12,13 @@ function Search({user, setUser})
     // here and in SavedPetsView. Should be 
     // refactored to have it at the App level
     ///////////////////////////////////////////
-    console.log(user)
     const nav=useNavigate();
     const [searchedPets, setSearchedPets]=useState([])
     const [usersSavedPets, setUsersSavedPets]=useState([])
     const [isLoaded,setIsLoaded]=useState(false)
-    const [clickPet, setClickPet]=useState('')
+    const [clicked, setClicked] =useState(false)
+    const [pet, setPet]=useState('')
+
 
     useEffect(()=>
     {
@@ -32,6 +33,7 @@ function Search({user, setUser})
         fetch("/api/saved_pets")
         .then(res=>res.json())
         .then(data=>{
+            console.log(data)
             if (data)
             {
                 setUsersSavedPets(data)
@@ -42,6 +44,7 @@ function Search({user, setUser})
         })
     },[])
 
+    console.log(usersSavedPets)
 
     function getDogPic(p)
     {
@@ -63,8 +66,7 @@ function Search({user, setUser})
             organization_id:p.organization_id,
             species:p.species, 
             photo:getDogPic(p),
-            petfinder_id:p.id,
-            user_id:user
+            petfinder_id:p.id
         }
         fetch(`/api/saved_pets`,
         {
@@ -112,6 +114,7 @@ function Search({user, setUser})
     }
 
 
+
     return (
 
         <div style={{marginLeft:'0px'}}>
@@ -127,7 +130,7 @@ function Search({user, setUser})
                     {searchedPets.animals.map(p=>
                     <div style={{minWidth:'300px', borderRadius:"3%"}} key={p.id}>
                         <h3>{p.name}</h3>
-                        <img style ={{maxHeight:'225px', maxWidth:'300px', borderRadius:"3%", margin:'auto'}} onClick={e=>setClickPet(p.name)} src={getDogPic(p)}/><br/>
+                        <img style ={{maxHeight:'225px', maxWidth:'300px', borderRadius:"3%", margin:'auto'}} onClick={e=>{setPet(p.name);setClicked(!clicked)}} src={getDogPic(p)}/><br/>
                         {
                             checkIfAlreadySaved(p) ?
                             <button className='w3-bar-item w3-button' onClick={e=>alert("Please go to saved pets page to view me!")}>Favorited Already</button>:
@@ -135,16 +138,15 @@ function Search({user, setUser})
                         }
                         <br/>
                         <br/>
-                        {clickPet===p.name ?
-                        <div id="myModal" className="modal">
-                            <div className="modal-content">
-                                <span className="close">&times;</span>
-                                <p>Some text in the Modal..</p>
+                        {pet==p.name ? 
+                            <div id="myModal" className={clicked?"model-display":"modal-hidden"}>
+                                <div className="modal-content">
+                                    <span className="close">&times;</span>
+                                    <p>{p.name}</p>
+                                </div>
                             </div>
-                        </div>
                         :
-                        null
-                        }
+                        null}
                     </div>
                     )}
                 </div>

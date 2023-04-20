@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import Login from './Login';
 import Search from './Search';
 import Signup from './Signup';
+import EditUserInfo from './EditUserInfo'
 
 
 
@@ -19,6 +20,7 @@ function App() {
         <Route exact path = '/signup' element ={<Signup/>}/>
         <Route exact path='/search' element={<Search/>}/>
         <Route exact path='/pets' element={<SavedPetsView/>}/>
+        <Route exact path='/edituserinfo' element={<EditUserInfo/>}/>
       </Routes>
     </div>
   )

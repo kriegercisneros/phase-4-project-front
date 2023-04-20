@@ -102,7 +102,41 @@ def login():
         else:
             return make_response(jsonify({"login":"Unauthorized"}), 401)
 
+@app.route('/update_user/<int:id>', methods=['PATCH'])
+def update_user(id):
+    if request.method == 'PATCH':
+        #unsure if we need to get sessions here or if it is ok with proxy now
+        # user_id = session.get("user_id")
+        user = User.query.filter(User.id == id).first()
+
+        # Check if user exists
+        if not user:
+            return make_response(jsonify({"error": "User not found."}), 404)
+
+        # Get the data from the request
+        data = request.get_json()
+
+        # Update the user attributes if provided in the request data
+        if "type" in data:
+            user.type = data["type"]
+        if "company_name" in data:
+            user.company_name = data["company_name"]
+        if "email" in data:
+            # Check if the new email already exists in the database
+            email_exists = User.query.filter(User.email == data["email"]).first()
+            if email_exists and email_exists.id != id:
+                return make_response(jsonify({"error": "Email already exists."}), 409)
+            user.email = data["email"]
+        if "password" in data:
+            user.password_hash = bcrypt.generate_password_hash(data["password"]).decode('utf-8')
         
+        # Commit the changes to the database
+        db.session.commit()
+
+        return make_response(jsonify(user.to_dict(), {"message": "User updated successfully."}), 200)
+
+
+
 @app.route('/info')
 def get_curr_user():
     user_id=session.get('user_id')
@@ -115,73 +149,11 @@ def get_curr_user():
         "email":user.email
     })
 
-
-# #save the user to a session 
-# #attempts to retrieve the user's info from the db using the ID.  if the user is found, info is returned as a json obj
-# @app.route('/checklogin', methods=['GET'])
-# def check_login():
-#     if request.method =='GET':
-#         user_id = session.get('user_id')
-#         if user_id:
-#             user=User.query.filter(User.id ==session['user_id']).first()
-#             return make_response(jsonify(user.to_dict()), 200)
-#     return make_response({"message":"login checked"})
-
-#funcitonality here to check to see if we are loggedin
-# @app.route('/checklogin')
-# def check_login():
-#         user_id = session.get('user_id')
-#         if user_id != None:
-#             return make_response({"logged_in":"True"}, 200)
-#         return make_response({"logged_in":"False"}, 200)
-
-
-# #this is some basic code to validate or not whether or not a user is allowed to access specific resources
-# #we will use this for allowing the admin to see the requests from a user
-# @app.route('/logged_user')
-# def logged_user():
-#     user_id =session.get('user_id')
-#     if user_id:
-#         user=User.query.filter(User.id == session["user_id"]).first()
-#         return make_response(jsonify(user.to_dict()), 200)
-
-#this is david's code
-# @app.route('/logout', methods=['DELETE'])
-# def logout():
-#     session['user_id']=None
-#     print(session['user_id'])
-#     return make_response(jsonify({"login":"loggedout"}),200)
-
-#tuturial guy's idea to make a logout a post and pop the session
 @app.route('/logout', methods=['POST'])
 def User_Logout():
     session.pop('user_id')
     return '200'
 
-# @app.route('/gettype', methods=['GET'])
-# def get_type():
-#     if session.get("valid"):
-#         user=User.query.filter(User.id == session['user_id']).first()
-#         return make_response(jsonify({"user_type":user.type}), 200)
-#     else:
-#         return make_response(jsonify({"login" :"invalid user"}),400)
-    
-
-
-# @app.before_request
-# def validate():
-#     if 'user_id' in session:
-#         user = User.query.filter(User.id == session["user_id"]).first()
-#         if user and user.type == 'user':
-#             session["valid"] = True
-#         else:
-#             session["valid"] = False
-#     else:
-#         session["valid"] = False
-
-
-#     response.set_cookie('mouse', 'Cookie')
-#     return response
 
 
 class OneSavedPet(Resource):
@@ -227,7 +199,7 @@ class AllSavedPets(Resource):
 
 class APICall(Resource):
     def get(self):
-        user_id=session.get('user_id')
+        # user_id=session.get('user_id')
         token=get_new_token()
         url='https://api.petfinder.com/v2/animals?organization=co52'
         headers1={"Authorization": f'Bearer {token}'}
@@ -235,7 +207,7 @@ class APICall(Resource):
         rb=make_response(res.text)
         rb.status_code=200
         rb.headers={'Content-Type':"application/json"}
-        print(session)
+        # print(session)
         # return(user_id)
         # return rb
     
@@ -255,3 +227,68 @@ api.add_resource(APICall,'/petfinder_api_call')
 if __name__ == '__main__':
     app.run( port = 5555, debug = True )
 
+# #save the user to a session 
+# #attempts to retrieve the user's info from the db using the ID.  if the user is found, info is returned as a json obj
+# @app.route('/checklogin', methods=['GET'])
+# def check_login():
+#     if request.method =='GET':
+#         user_id = session.get('user_id')
+#         if user_id:
+#             user=User.query.filter(User.id ==session['user_id']).first()
+#             return make_response(jsonify(user.to_dict()), 200)
+#     return make_response({"message":"login checked"})
+
+#funcitonality here to check to see if we are loggedin
+# @app.route('/checklogin')
+# def check_login():
+#         user_id = session.get('user_id')
+#         if user_id != None:
+#             return make_response({"logged_in":"True"}, 200)
+#         return make_response({"logged_in":"False"}, 200)
+
+#tuturial guy's idea to make a logout a post and pop the session
+
+
+# #this is some basic code to validate or not whether or not a user is allowed to access specific resources
+# #we will use this for allowing the admin to see the requests from a user
+# @app.route('/logged_user')
+# def logged_user():
+#     user_id =session.get('user_id')
+#     if user_id:
+#         user=User.query.filter(User.id == session["user_id"]).first()
+#         return make_response(jsonify(user.to_dict()), 200)
+
+#this is david's code
+# @app.route('/logout', methods=['DELETE'])
+# def logout():
+#     session['user_id']=None
+#     print(session['user_id'])
+#     return make_response(jsonify({"login":"loggedout"}),200)
+
+
+
+
+# @app.route('/gettype', methods=['GET'])
+# def get_type():
+#     if session.get("valid"):
+#         user=User.query.filter(User.id == session['user_id']).first()
+#         return make_response(jsonify({"user_type":user.type}), 200)
+#     else:
+#         return make_response(jsonify({"login" :"invalid user"}),400)
+    
+
+
+# @app.before_request
+# def validate():
+#     if 'user_id' in session:
+#         user = User.query.filter(User.id == session["user_id"]).first()
+#         if user and user.type == 'user':
+#             session["valid"] = True
+#         else:
+#             session["valid"] = False
+#     else:
+#         session["valid"] = False
+
+
+#     response.set_cookie('mouse', 'Cookie')
+#     return response

@@ -12,7 +12,6 @@ function Basic({styles}){
         <div>
           <h1>Hello, please login.</h1>
           <Formik
-
             initialValues={{ email: '', password: '' }}
             validate={values => {
               const errors = {};

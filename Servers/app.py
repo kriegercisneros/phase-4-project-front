@@ -228,8 +228,7 @@ class OneSavedPet(Resource):
 
 class AllSavedPets(Resource):
     def get(self):
-        pets=SavedPets.query.all()
-
+        pets=SavedPets.query.filter(SavedPets.user_id==session['user_id']).all()
         pets_dict=[p.to_dict() for p in pets]
         return make_response(pets_dict, 200)
 

@@ -88,7 +88,6 @@ def users():
 @app.route('/login', methods=['POST'])
 def login():
     if request.method == 'POST':
-        print(session)
         jsoned_request = request.get_json()
         user = User.query.filter(User.email == jsoned_request['email']).first()
         if user and user.authenticate(jsoned_request["password"]):

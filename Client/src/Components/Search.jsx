@@ -34,8 +34,7 @@ function Search({user, setUser})
         .then(res=>res.json())
         .then(data=>{
             console.log(data)
-            if (data)
-
+            try 
             {
                 setUsersSavedPets(data)
             }

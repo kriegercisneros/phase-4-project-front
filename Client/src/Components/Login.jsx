@@ -1,10 +1,13 @@
 import React from 'react'
+
 import { useState , useEffect } from 'react'
+
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useNavigate } from 'react-router-dom'
 
 // const Basic = () => (
     
+
 function Login({user, setUser}){
     const nav=useNavigate()
   
@@ -42,7 +45,6 @@ function Login({user, setUser}){
               return errors;
             }}
             onSubmit={(values, { setSubmitting }) => {
-
            fetch('/api/login', {
                   method:'POST',
                   headers: {
@@ -69,9 +71,12 @@ function Login({user, setUser}){
           >
             {({ isSubmitting }) => (
               <Form>
-                <Field type="email" name="email" placeholder='Email' />
-                <ErrorMessage name="email" component="div"/>
-                <Field type="password" name="password" placeholder="Password"/>
+
+                <label htmlFor='Email'>Email</label>
+                <Field type="email" name="email" />
+                <ErrorMessage name="email" component="div" />
+                <Field type="password" name="password" />
+
                 <ErrorMessage name="password" component="div" />
                 <button type="submit">
                   Submit

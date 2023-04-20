@@ -109,7 +109,7 @@ function Search({user, setUser})
 
     return (
         <>
-        <div>Hi put user here it is going to be tougher than i thought</div>
+        <div>Hi User</div>
             <button onClick={e=>nav('/pets')}>View Favorited Pets</button>
             <button onClick={e=>handleLogOut(e)}>Logout</button>
             {isLoaded?

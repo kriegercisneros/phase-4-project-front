@@ -228,8 +228,7 @@ class OneSavedPet(Resource):
 
 class AllSavedPets(Resource):
     def get(self):
-        pets=SavedPets.query.all()
-
+        pets=SavedPets.query.filter(SavedPets.user_id==session['user_id']).all()
         pets_dict=[p.to_dict() for p in pets]
         return make_response(pets_dict, 200)
 
@@ -256,8 +255,6 @@ class AllSavedPets(Resource):
 
 class APICall(Resource):
     def get(self):
-
-        user_id=session.get('user_id')
         token=get_new_token()
         url='https://api.petfinder.com/v2/animals?organization=co52'
         headers1={"Authorization": f'Bearer {token}'}
@@ -265,9 +262,7 @@ class APICall(Resource):
         rb=make_response(res.text)
         rb.status_code=200
         rb.headers={'Content-Type':"application/json"}
-        # print(session)
-        # return(user_id)
-        # return rb
+        return rb
     
 def get_new_token():
     headers = {'Content-Type': 'application/x-www-form-urlencoded',}

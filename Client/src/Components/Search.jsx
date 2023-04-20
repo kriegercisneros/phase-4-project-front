@@ -20,7 +20,7 @@ function Search({user, setUser})
 
     useEffect(()=>
     {
-        fetch("http://127.0.0.1:8000/petfinder_api_call")
+        fetch("/api/petfinder_api_call")
         .then(res=>res.json())
         .then(data=>{
             setIsLoaded(true)
@@ -28,7 +28,7 @@ function Search({user, setUser})
         })
         .catch(error=>console.log(error))
 
-        fetch("http://127.0.0.1:8000/saved_pets")
+        fetch("/api/saved_pets")
         .then(res=>res.json())
         .then(data=>{
             if (data)
@@ -65,7 +65,7 @@ function Search({user, setUser})
             petfinder_id:p.id,
             user_id:user
         }
-        fetch(`http://127.0.0.1:8000/saved_pets`,
+        fetch(`/api/saved_pets`,
         {
             method: 'POST',
             headers: 
@@ -76,7 +76,11 @@ function Search({user, setUser})
             body: JSON.stringify(newPet)
         })
         .then(res=>res.json())
-        .then(data=>setUsersSavedPets([...usersSavedPets, data]))
+        .then(data=>
+            {
+                if (data)
+                    setUsersSavedPets([...usersSavedPets, data])
+            })
     }
 
     function checkIfAlreadySaved(p)
@@ -93,9 +97,9 @@ function Search({user, setUser})
     console.log(usersSavedPets)
 
     function handleLogOut(e){
-        fetch('http://127.0.0.1:8000/logout',
+        fetch('/api/logout',
         {
-            method: 'DELETE',
+            method: 'POST',
             headers: 
             {
                 "Content-Type":'application/json',
@@ -107,29 +111,32 @@ function Search({user, setUser})
         .then(()=>nav('/'))
     }
 
+
     return (
-        <>
-        <div>Hi User</div>
-            <button onClick={e=>nav('/pets')}>View Favorited Pets</button>
-            <button onClick={e=>handleLogOut(e)}>Logout</button>
+        <div style={{marginLeft:'0px'}}>
+            <div className="w3-sidebar w3-bar-block w3-white" style={{"z-index":"3","width":"250px"}}>
+                <h2 className="w3-container w3-display-container w3-padding-16">Re_Treat</h2>
+                <button className='w3-bar-item w3-button'  onClick={e=>nav('/pets')}>View Favorited Pets</button>
+                <button className='w3-bar-item w3-button' onClick={e=>handleLogOut(e)}>Logout</button>
+            </div>
             {isLoaded?
-                <>
+                <div className="w3-display-container w3-container" style={{marginLeft:'250px', display:'flex', flexWrap:'wrap'}}>
                     {searchedPets.animals.map(p=>
-                    <div key={p.id} style={{borderColor:'black', borderStyle:'solid'}}>
+                    <div style={{minWidth:'300px', borderRadius:"3%"}} key={p.id}>
                         <h3>{p.name}</h3>
-                        <img src={getDogPic(p)}/><br/>
+                        <img style ={{maxHeight:'225px', maxWidth:'300px', borderRadius:"3%"}} src={getDogPic(p)}/><br/>
                         {
                             checkIfAlreadySaved(p) ?
-                            <button onClick={e=>alert("Please go to saved pets page to view me!")}>Favorited Already</button>:
-                            <button onClick={e=>handleSavedPet(p)}>Favorite me!</button>
+                            <button className='w3-bar-item w3-button' onClick={e=>alert("Please go to saved pets page to view me!")}>Favorited Already</button>:
+                            <button className='w3-bar-item w3-button' onClick={e=>handleSavedPet(p)}>Favorite me!</button>
                         }
                     </div>
                     )}
-                </>
+                </div>
                 :
                 <h1>Loading...</h1>
             }
-        </>
+        </div>
     )
 
 }

@@ -16,7 +16,7 @@ function SavedPetsView({user, setUser})
 
     useEffect(()=>
     {
-        fetch("http://127.0.0.1:8000/saved_pets")
+        fetch("/api/saved_pets")
         .then(res=>res.json())
         .then(data=>
         {
@@ -27,7 +27,7 @@ function SavedPetsView({user, setUser})
 
     function handleDelete(p)
     {
-        fetch(`http://127.0.0.1:8000/saved_pets/${p.id}`,
+        fetch(`/api/saved_pets/${p.id}`,
         {
             method: 'DELETE',
             headers: 
@@ -44,24 +44,43 @@ function SavedPetsView({user, setUser})
         })
     }
 
+    function handleLogOut(e){
+        fetch('/api/logout',
+        {
+            method: 'POST',
+            headers: 
+            {
+                "Content-Type":'application/json',
+                "Accepts":"application/json"
+            }
+        })
+        .then(res=>res.json())
+        .then(()=>console.log("loggedout"))
+        .then(()=>nav('/'))
+    }
+
     return (
-        <>
-            <button onClick={e=>nav('/search')}>Click Here to View Available Pets</button>
+        <div style={{marginLeft:'0px'}}>
+            <div>
+                <h2 className="w3-container w3-display-container w3-padding-16">Re_Treat</h2>
+                <button className='w3-bar-item w3-button' onClick={e=>nav('/search')}>Click Here to View Available Pets</button>
+                <button className='w3-bar-item w3-button' onClick={e=>handleLogOut(e)}>Logout</button>
+            </div>
             {
                 isLoaded ? 
-                <>
-                {usersSavedPets.map(pet=>
-                    <div key={pet.id} style={{borderColor:'black', borderStyle:'solid'}}>
-                        <h3>{pet.name}</h3>
-                        <img src={pet.photo}/><br/>
-                        <button onClick={e=>handleDelete(pet)}>Unfavorite</button>
-                    </div>
-                )}
-                </>
+                <div className="w3-display-container w3-container" style={{marginLeft:'250px', display:'flex', flexWrap:'wrap'}}>
+                    {usersSavedPets.map(pet=>
+                        <div key={pet.id} style={{minWidth:'300px', borderRadius:"3%"}} >
+                            <h3>{pet.name}</h3>
+                            <img style={{maxHeight:'225px', maxWidth:'300px', borderRadius:"3%"}} src={pet.photo}/><br/>
+                            <button className='w3-bar-item w3-button' onClick={e=>handleDelete(pet)}>Unfavorite</button>
+                        </div>
+                    )}
+                </div>
                 :
                 <p>loading...</p>
             }
-        </>
+        </div>
     )
 }
 

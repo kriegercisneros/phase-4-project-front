@@ -55,13 +55,13 @@ function Login({user, setUser}){
                   .then((r)=>
                   {
                     console.log(r.status)
-                    return  r.json()
+                    return r.json()
                   })  
                   .then(data=>
                     {
-                      if (data['id'])
+                      if (data[0]['id'])
                       {
-                        setUser(data['id'])
+                        setUser(data[0]['id'])
                       }
                       else{
                         alert("Please log in.")
@@ -71,13 +71,11 @@ function Login({user, setUser}){
           >
             {({ isSubmitting }) => (
               <Form>
-
-                <label htmlFor='Email'>Email</label>
-                <Field type="email" name="email" />
+                <Field type="email" name="email" placeholder="Email" />
                 <ErrorMessage name="email" component="div" />
-                <Field type="password" name="password" />
+                <Field type="password" name="password" placeholder="Password" />
 
-                <ErrorMessage name="password" component="div" />
+                <ErrorMessage name="password" component="div"/>
                 <button type="submit">
                   Submit
                 </button>
@@ -89,7 +87,7 @@ function Login({user, setUser}){
           <button onClick={e=>nav('/signup')}>Signup</button>
           <br/><br/>
           <h3>Or try us for free!</h3>
-          <button onClick={e=>nav('/search')}>Guest</button>
+          <button onClick={e=>alert("We'll add functionality later :)")}>Guest</button>
         </div>
       );
 }

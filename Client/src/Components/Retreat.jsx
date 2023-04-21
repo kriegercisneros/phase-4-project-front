@@ -39,8 +39,16 @@ function Approved(){
         )
     }
     return (
-    <div>
-        <h1>Create a Re-Treat!</h1>
+    <div style={{marginLeft:'0px', marginTop:'0px'}}>
+        <h1>Create a Re-Treat!</h1><br/>
+        <div className="w3-sidebar w3-bar-block w3-white" style={{zIndex:"3","width":"250px"}}>
+                <h2 className="w3-container w3-display-container w3-padding-16g">Re_Treat</h2>
+                <button className='w3-bar-item w3-button' onClick={e=>nav('/pets')}>View Favorited Pets</button>
+                <button className='w3-bar-item w3-button' onClick={e=>nav('/search')}>View Available Pets</button>
+                <button className='w3-bar-item w3-button' onClick={e=>handleLogOut(e)}>Logout</button>
+                <button className='w3-bar-item w3-button' onClick={e=>nav('/edituserinfo')}>Edit User Information</button>
+                
+            </div>
         <Formik
         initialValues={{ 
             user_id : user,
@@ -67,6 +75,7 @@ function Approved(){
         }}
         >
         {({ isSubmitting }) => (
+
             <Form>
 
             <Field type="textarea" name="location" placeholder='location' />

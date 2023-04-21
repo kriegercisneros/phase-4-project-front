@@ -175,7 +175,8 @@ def retreat():
             retreat=Retreat(
                 date=data['date'],
                 location=data['location'],
-                user_id=session.get('user_id')
+                user_id=data['user_id'],
+                approved=data['approved']
             )
             db.session.add(retreat)
             db.session.commit()
@@ -183,8 +184,9 @@ def retreat():
         except Exception as e:
             return make_response({"errors": [e.__str__()]}, 422)
     elif request.method=='GET':
-        retreat=Retreat.query.all()
-        retreat_dict_list=[retreats.to_dict() for retreats in r]
+        print(request.get_json())
+        retreat=Retreat.query.filter(Retreat.user_id==session['user_id']).all()
+        retreat_dict_list=[retreats.to_dict() for retreats in retreat]
         return make_response(jsonify(retreat_dict_list), 200)
 
 

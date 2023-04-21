@@ -11,7 +11,7 @@ function EditUserInfo({user, setUser}) {
     if (user===undefined){
       return nav('/')
     }
-  
+    
     fetch(`/api/updateuser/${user}`)
     .then(res=>res.json())
     .then(data=>setUserinfo(data))
@@ -50,6 +50,7 @@ function EditUserInfo({user, setUser}) {
 
   return(
     <div style={{marginTop:'0px'}}>
+      <h1>Edit User Information</h1><br/>
         <div style={{marginLeft:'0px'}}>
           <div className="w3-sidebar w3-bar-block w3-white" style={{zIndex:"3","width":"250px"}}>
               <h2 className="w3-container w3-display-container w3-padding-16g">Re_Treat</h2>
@@ -59,7 +60,6 @@ function EditUserInfo({user, setUser}) {
           </div>
         </div>
         <div className="w3-display-container w3-container" style={{marginLeft:'250px'}}>
-          <h1>Edit User Information</h1>
               <Formik
                   initialValues={{ type:'', company_name: '', email: '', password:'' }}
                   // validate={values => {

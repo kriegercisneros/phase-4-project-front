@@ -7,6 +7,7 @@ import EditUserInfo from './EditUserInfo'
 import CrashableButton from './ErrorButton'
 import Approve from './Approve'
 import Retreat from './Retreat'
+import RetreatView from './RetreatView';
 
 
 
@@ -28,8 +29,8 @@ function App() {
         <Route exact path='/edituserinfo' element={<EditUserInfo user={user} setUser={setUser}/>}/>
         <Route exact path='/errorbutton' element={<CrashableButton/>}/>
         <Route exact path ='/approve' element={<Approve />}/>
+        <Route exact path='/retreat_view' element={<RetreatView/>}/>
         <Route exact path ='/retreat' element={<Retreat/>}/>
-        <Route exact path='/retreat_view' element={<Retreat/>}/>
       </Routes>
     </div>
   )

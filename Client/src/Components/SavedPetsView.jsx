@@ -67,12 +67,15 @@ function SavedPetsView({user, setUser})
 
     return (
         <div style={{marginLeft:'0px'}}>
+        <h1>Favorited Pets</h1><br/>
+
             <div className="w3-sidebar w3-bar-block w3-white" style={{zIndex:"3","width":"250px"}}>
                 <h2 className="w3-container w3-display-container w3-padding-16">Re_Treat</h2>
                 <button className='w3-bar-item w3-button' onClick={e=>nav('/search')}>View Available Pets</button>
                 <button className='w3-bar-item w3-button' onClick={e=>handleLogOut(e)}>Logout</button>
                 <button className='w3-bar-item w3-button' onClick={e=>nav('/edituserinfo')}>Edit User Information</button>
                 <button className='w3-bar-item w3-button' onClick={e=>nav('/retreat')}>Create A Re-Treat!</button>
+                <button className='w3-bar-item w3-button' onClick={e=>nav('/retreat_view')}>View Reteats</button>
             </div>
             {
                 isLoaded ? 
@@ -87,7 +90,9 @@ function SavedPetsView({user, setUser})
                                     <div id="myModal" className={clicked?"model-display":"modal-hidden"}>
                                         <div className="modal-content">
                                         <span className="close">&times;</span>
-                                        <p>{pet.name}</p>
+                                        <p>{pet.species}</p>
+                                        <p>{pet.breed}</p>                                
+                                        <p>{pet.gender}</p>
                                         </div>
                                     </div>
                                 :

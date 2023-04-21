@@ -29,6 +29,7 @@ function App() {
         <Route exact path='/errorbutton' element={<CrashableButton/>}/>
         <Route exact path ='/approve' element={<Approve />}/>
         <Route exact path ='/retreat' element={<Retreat/>}/>
+        <Route exact path='/retreat_view' element={<Retreat/>}/>
       </Routes>
     </div>
   )

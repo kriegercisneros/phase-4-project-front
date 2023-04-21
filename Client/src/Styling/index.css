@@ -29,6 +29,7 @@ a:hover {
 
 body {
   background-color:'#fafafa';
+  margin-top:0px;
   margin: 0;
   display: flex;
   place-items: center;

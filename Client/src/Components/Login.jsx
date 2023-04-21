@@ -22,8 +22,11 @@ function Login({user, setUser, type, setType}){
     {   
         fetch('/api/info')
         .then(r=>r.json())
-        .then(data=>setUser(data['id']))
-        .then(data=>setType(data['type']))
+        .then(data=>{
+            console.log(data)
+            setUser(data['id']);
+            setType(data['type']);
+        })
     }, [])
 //i wrote this to login based upon type of user, so now it will not automatically reroute if a user is logged in 
     if(user){

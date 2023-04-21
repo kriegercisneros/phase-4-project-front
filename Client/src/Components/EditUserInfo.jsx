@@ -49,7 +49,7 @@ function EditUserInfo({user, setUser}) {
   console.log(user)
 
   return(
-    <div>
+    <div style={{marginTop:'0px'}}>
         <div style={{marginLeft:'0px'}}>
           <div className="w3-sidebar w3-bar-block w3-white" style={{zIndex:"3","width":"250px"}}>
               <h2 className="w3-container w3-display-container w3-padding-16g">Re_Treat</h2>

@@ -38,8 +38,32 @@ function Approved(){
             <span>Loading...</span>
         )
     }
+
+    function handleLogOut(e){
+        fetch('/api/logout',
+        {
+            method: 'POST',
+            headers: 
+            {
+                "Content-Type":'application/json',
+                "Accepts":"application/json"
+            }
+        })
+        .then(res=>res.json())
+        .then(()=>console.log("loggedout"))
+        .then(()=>nav('/'))
+    }
+    
     return (
     <div>
+            <div className="w3-sidebar w3-bar-block w3-white" style={{zIndex:"3","width":"250px"}}>
+                <h2 className="w3-container w3-display-container w3-padding-16">Re_Treat</h2>
+                <button className='w3-bar-item w3-button' onClick={e=>nav('/search')}>View Available Pets</button>
+                <button className='w3-bar-item w3-button' onClick={e=>nav('/pets')}>View Favorited Pets</button>
+
+                <button className='w3-bar-item w3-button' onClick={e=>handleLogOut(e)}>Logout</button>
+                <button className='w3-bar-item w3-button' onClick={e=>nav('/edituserinfo')}>Edit User Information</button>
+            </div>
         <h1>Create a Re-Treat!</h1>
         <Formik
         initialValues={{ 

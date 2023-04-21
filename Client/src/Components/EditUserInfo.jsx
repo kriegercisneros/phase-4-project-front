@@ -46,10 +46,24 @@ function EditUserInfo({user, setUser}) {
   }
 
 
-  console.log(user)
+  function handleLogOut(e){
+    fetch('/api/logout',
+    {
+        method: 'POST',
+        headers: 
+        {
+            "Content-Type":'application/json',
+            "Accepts":"application/json"
+        }
+    })
+    .then(res=>res.json())
+    .then(()=>console.log("loggedout"))
+    .then(()=>nav('/'))
+}
 
   return(
     <div>
+        <h1>Edit User Information</h1><br/><br/>
         <div style={{marginLeft:'0px'}}>
           <div className="w3-sidebar w3-bar-block w3-white" style={{zIndex:"3","width":"250px"}}>
               <h2 className="w3-container w3-display-container w3-padding-16g">Re_Treat</h2>
@@ -59,7 +73,6 @@ function EditUserInfo({user, setUser}) {
           </div>
         </div>
         <div className="w3-display-container w3-container" style={{marginLeft:'250px'}}>
-          <h1>Edit User Information</h1>
               <Formik
                   initialValues={{ type:'', company_name: '', email: '', password:'' }}
                   // validate={values => {

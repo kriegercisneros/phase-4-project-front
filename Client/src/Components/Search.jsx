@@ -114,11 +114,26 @@ function Search({user, setUser})
         .then(()=>nav('/'))
     }
 
+    function handleLogOut(e){
+        fetch('/api/logout',
+        {
+            method: 'POST',
+            headers: 
+            {
+                "Content-Type":'application/json',
+                "Accepts":"application/json"
+            }
+        })
+        .then(res=>res.json())
+        .then(()=>console.log("loggedout"))
+        .then(()=>nav('/'))
+    }
 
 
     return (
 
         <div style={{marginLeft:'0px', marginTop:'0px'}}>
+            <h1>Available Pets</h1>
             <div className="w3-sidebar w3-bar-block w3-white" style={{zIndex:"3","width":"250px"}}>
                 <h2 className="w3-container w3-display-container w3-padding-16g">Re_Treat</h2>
                 <button className='w3-bar-item w3-button'  onClick={e=>nav('/pets')}>View Favorited Pets</button>

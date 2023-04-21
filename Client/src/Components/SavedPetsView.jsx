@@ -19,6 +19,9 @@ function SavedPetsView({user, setUser})
 
     useEffect(()=>
     {
+        if (user===undefined){
+            return nav('/')
+          }
         fetch("/api/saved_pets")
         .then(res=>res.json())
         .then(data=>
@@ -66,7 +69,7 @@ function SavedPetsView({user, setUser})
         <div style={{marginLeft:'0px'}}>
             <div className="w3-sidebar w3-bar-block w3-white" style={{zIndex:"3","width":"250px"}}>
                 <h2 className="w3-container w3-display-container w3-padding-16">Re_Treat</h2>
-                <button className='w3-bar-item w3-button' onClick={e=>nav('/search')}>Click Here to View Available Pets</button>
+                <button className='w3-bar-item w3-button' onClick={e=>nav('/search')}>View Available Pets</button>
                 <button className='w3-bar-item w3-button' onClick={e=>handleLogOut(e)}>Logout</button>
                 <button className='w3-bar-item w3-button' onClick={e=>nav('/edituserinfo')}>Edit User Information</button>
                 <button className='w3-bar-item w3-button' onClick={e=>nav('/retreat')}>Create A Re-Treat!</button>
@@ -77,14 +80,14 @@ function SavedPetsView({user, setUser})
                         {usersSavedPets.map(pet=>
                             <div key={pet.id} style={{minWidth:'300px', borderRadius:"3%"}} >
                                 <h3>{pet.name}</h3>
-                                <img style={{maxHeight:'225px', maxWidth:'300px', borderRadius:"3%"}} onClick={e=>{setPet(p.name);setClicked(!clicked)}} src={pet.photo}/><br/>
+                                <img style={{maxHeight:'225px', maxWidth:'300px', borderRadius:"3%"}} onClick={e=>{setPet(pet.name);setClicked(!clicked)}} src={pet.photo}/><br/>
                                 <button className='w3-bar-item w3-button' onClick={e=>handleDelete(pet)}>Unfavorite</button>
                                 <br/><br/>
                                 {clickpet==pet.name ? 
                                     <div id="myModal" className={clicked?"model-display":"modal-hidden"}>
                                         <div className="modal-content">
                                         <span className="close">&times;</span>
-                                        <p>{p.name}</p>
+                                        <p>{pet.name}</p>
                                         </div>
                                     </div>
                                 :

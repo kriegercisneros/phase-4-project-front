@@ -52,6 +52,7 @@ function EditUserInfo({user, setUser}) {
     <div style={{marginTop:'0px'}}>
       <h1>Edit User Information</h1><br/>
         <div style={{marginLeft:'0px'}}>
+        <h1>Edit User Information</h1><br/>
           <div className="w3-sidebar w3-bar-block w3-white" style={{zIndex:"3","width":"250px"}}>
               <h2 className="w3-container w3-display-container w3-padding-16g">Re_Treat</h2>
               <button className='w3-bar-item w3-button'  onClick={e=>nav('/search')}>View Available Pets</button>

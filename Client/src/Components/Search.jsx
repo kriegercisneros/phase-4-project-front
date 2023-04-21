@@ -34,8 +34,7 @@ function Search({user, setUser})
         .then(res=>res.json())
         .then(data=>{
             console.log(data)
-            if (data)
-
+            try
             {
                 setUsersSavedPets(data)
             }
@@ -125,6 +124,7 @@ function Search({user, setUser})
                 <button className='w3-bar-item w3-button' onClick={e=>handleLogOut(e)}>Logout</button>
                 {/* also when we route here to edituserinfo, we need to pass user id from sessions*/}
                 <button className='w3-bar-item w3-button' onClick={e=>nav('/edituserinfo')}>Edit User Information</button>
+                
             </div>
             {isLoaded?
                 <div className="w3-display-container w3-container" style={{marginLeft:'250px', display:'flex', flexWrap:'wrap'}}>

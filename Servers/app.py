@@ -154,8 +154,10 @@ def get_curr_user():
     user=User.query.filter(User.id==user_id).first()
     return jsonify({
         "id":user.id, 
-        "email":user.email,
-        'type':user.type
+
+        "email":user.email, 
+        "type":user.type
+
     })
 
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from app import app 
-from models import db, User, SavedPets
+from models import db, User, SavedPets, Retreat
 
 # from faker import Faker
 # from random import randint
@@ -10,6 +10,7 @@ from models import db, User, SavedPets
 with app.app_context():
     print("Deleting Users...")
     SavedPets.query.delete()
+    Retreat.query.delete()
     User.query.delete()
     
     print("Creating users...")

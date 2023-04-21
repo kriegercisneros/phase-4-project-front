@@ -22,9 +22,9 @@ function Search({user, setUser})
 
     useEffect(()=>
     {
-        if (user===undefined){
-            return nav('/')
-          }
+        // if (user===undefined){
+        //     return nav('/')
+        //   }
         fetch("/api/petfinder_api_call")
         .then(res=>res.json())
         .then(data=>{

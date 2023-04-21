@@ -72,6 +72,7 @@ function SavedPetsView({user, setUser})
                 <button className='w3-bar-item w3-button' onClick={e=>nav('/search')}>View Available Pets</button>
                 <button className='w3-bar-item w3-button' onClick={e=>handleLogOut(e)}>Logout</button>
                 <button className='w3-bar-item w3-button' onClick={e=>nav('/edituserinfo')}>Edit User Information</button>
+                <button className='w3-bar-item w3-button' onClick={e=>nav('/retreat')}>Create A Re-Treat!</button>
             </div>
             {
                 isLoaded ? 

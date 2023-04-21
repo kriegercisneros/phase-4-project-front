@@ -2,7 +2,7 @@ from flask import Flask, request, make_response, jsonify, session
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
 import requests
-from models import db, SavedPets, User
+from models import db, SavedPets, User, Retreat
 from flask_bcrypt import Bcrypt
 from services import app,bcrypt,db
 import os
@@ -145,7 +145,6 @@ def update_user(id):
         return make_response(jsonify(user.to_dict(), {"message": "User updated successfully."}), 200)
 
 
-
 @app.route('/info')
 def get_curr_user():
     user_id=session.get('user_id')
@@ -158,35 +157,6 @@ def get_curr_user():
         "email":user.email
     })
 
-# #save the user to a session 
-# #attempts to retrieve the user's info from the db using the ID.  if the user is found, info is returned as a json obj
-# @app.route('/checklogin', methods=['GET'])
-# def check_login():
-#     if request.method =='GET':
-#         user_id = session.get('user_id')
-#         if user_id:
-#             user=User.query.filter(User.id ==session['user_id']).first()
-#             return make_response(jsonify(user.to_dict()), 200)
-#     return make_response({"message":"login checked"})
-
-#funcitonality here to check to see if we are loggedin
-# @app.route('/checklogin')
-# def check_login():
-#         user_id = session.get('user_id')
-#         if user_id != None:
-#             return make_response({"logged_in":"True"}, 200)
-#         return make_response({"logged_in":"False"}, 200)
-
-
-# #this is some basic code to validate or not whether or not a user is allowed to access specific resources
-# #we will use this for allowing the admin to see the requests from a user
-# @app.route('/logged_user')
-# def logged_user():
-#     user_id =session.get('user_id')
-#     if user_id:
-#         user=User.query.filter(User.id == session["user_id"]).first()
-#         return make_response(jsonify(user.to_dict()), 200)
-
 
 @app.route('/logout', methods=['POST'])
 def User_Logout():
@@ -195,29 +165,26 @@ def User_Logout():
     session.pop('user_type')
     return '200'
 
-# @app.route('/gettype', methods=['GET'])
-# def get_type():
-#     if session.get("valid"):
-#         user=User.query.filter(User.id == session['user_id']).first()
-#         return make_response(jsonify({"user_type":user.type}), 200)
-#     else:
-#         return make_response(jsonify({"login" :"invalid user"}),400)
-
-# @app.before_request
-# def validate():
-#     if 'user_id' in session:
-#         user = User.query.filter(User.id == session["user_id"]).first()
-#         if user and user.type == 'user':
-#             session["valid"] = True
-#         else:
-#             session["valid"] = False
-#     else:
-#         session["valid"] = False
-
-
-#     response.set_cookie('mouse', 'Cookie')
-#     return response
-
+@app.route('/retreat', methods=['POST', 'GET'])
+def retreat():
+    if request.method=='POST':
+        data=request.get_json()
+        print(data)
+        try:
+            retreat=Retreat(
+                date=data['date'],
+                location=data['location'],
+                user_id=session.get('user_id')
+            )
+            db.session.add(retreat)
+            db.session.commit()
+            return make_response(jsonify(retreat.to_dict(), {"message":"re-treat created successfully"}), 201)
+        except Exception as e:
+            return make_response({"errors": [e.__str__()]}, 422)
+    elif request.method=='GET':
+        retreat=Retreat.query.all()
+        retreat_dict_list=[retreats.to_dict() for retreats in r]
+        return make_response(jsonify(retreat_dict_list), 200)
 
 
 class OneSavedPet(Resource):

@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom'
 function Login({user, setUser, type, setType}){
     const nav=useNavigate()
     console.log(user)
+    console.log
 //////////////////////////
 // UseEffect checks 
 // if user is logged in 
@@ -22,10 +23,12 @@ function Login({user, setUser, type, setType}){
         fetch('/api/info')
         .then(r=>r.json())
         .then(data=>setUser(data['id']))
+        .then(data=>setType(data['type']))
     }, [])
-
+//i wrote this to login based upon type of user, so now it will not automatically reroute if a user is logged in 
     if(user){
-        return nav('/search')
+        if(type == 'user'){return nav('/search')}
+        else if(type =='admin'){return nav('/approve')}
     }
 
     return(
@@ -62,6 +65,7 @@ function Login({user, setUser, type, setType}){
                       try
                       {
                         setUser(data[0]['id'])
+                        setType(data[0]['type'])
                       }
                       catch{
                         alert("Please log in.")

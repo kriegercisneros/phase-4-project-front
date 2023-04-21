@@ -5,6 +5,8 @@ import Search from './Search';
 import Signup from './Signup';
 import EditUserInfo from './EditUserInfo'
 import CrashableButton from './ErrorButton'
+import Approve from './Approve'
+import Retreat from './Retreat'
 
 
 
@@ -25,6 +27,8 @@ function App() {
         <Route exact path='/pets' element={<SavedPetsView user={user} setUser={setUser}/>}/>
         <Route exact path='/edituserinfo' element={<EditUserInfo user={user} setUser={setUser}/>}/>
         <Route exact path='/errorbutton' element={<CrashableButton/>}/>
+        <Route exact path ='/approve' element={<Approve />}/>
+        <Route exact path ='/retreat' element={<Retreat/>}/>
       </Routes>
     </div>
   )

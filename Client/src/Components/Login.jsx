@@ -64,18 +64,14 @@ function Login({user, setUser, type, setType}){
                     console.log(r.status)
                     return r.json()
 
-                  })  
-                  .then(data=>
-                    {
-                      try
-                      {
+                })  
+                .then(data=>{
+                    try{
                         setUser(data[0]['id'])
-                        setType(data[0]['type'])
-                      }
-                      catch{
-                        alert("Please log in.")
-                      }
-                    })
+                        setType(data[0]['type'])}
+                    catch{
+                        alert("Please log in.")}
+                })
             }}
         >
             {({ isSubmitting }) => (
@@ -83,7 +79,6 @@ function Login({user, setUser, type, setType}){
                     <Field type="email" name="email" placeholder="Email" />
                     <ErrorMessage name="email" component="div" />
                     <Field type="password" name="password" placeholder="Password" />
-
                     <ErrorMessage name="password" component="div"/>
                     <button type="submit">Submit</button>
                 </Form>

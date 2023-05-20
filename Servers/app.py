@@ -15,22 +15,12 @@ app = Flask(__name__)
 
 
 load_dotenv()
-#use os.environ.get() to get the data from the .env file
-
-#this is now in services
-
-# app.config['SESSION_PERMANENT'] = True
-# app.config['SESSION_COOKIE_SECURE'] = False
-# app.config['SESSION_TYPE'] = 'filesystem'
-# app.permanent_session_lifetime = timedelta(minutes=30)
-# Session(app)
 
 app.secret_key = os.environ.get("secretkey")
 
 #python -c 'import os; print(os.urandom(16))'
-#this needs to be with postgres
+
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI')
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
 
@@ -71,7 +61,6 @@ def users():
                 email=email,
                 shelter_id=data['shelter_id']
             )
-            #my password hash is in a different file, tutorial guy has his password hased and encrypted by bcrypt right here
             user.password_hash = password
             db.session.add(user)
             db.session.commit()
